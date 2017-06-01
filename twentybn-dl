@@ -107,6 +107,7 @@ class Dataset(object):
             for f in self.filenames:
                 chunk_path = op.join(self.tmp_dir, f)
                 with open(chunk_path, 'rb') as source:
+                    print("Now appending: '{}'".format(f))
                     while True:
                         read_bytes = source.read(read_chunk_size)
                         target.write(read_bytes)
