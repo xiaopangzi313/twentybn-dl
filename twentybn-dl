@@ -35,6 +35,13 @@ class Dataset(object):
     def ensure_directories_exist(self):
         os.makedirs(self.tmp_dir, exist_ok=True)
 
+    def ensure_chunks_exist(self):
+        for f in self.filenames:
+            chunk_path = op.join(self.tmp_dir, f)
+            if not op.isfile(chunk_path):
+                message = "Chunk: '{}' is missing!".format(chunk_path)
+                raise MissingChunksException(message)
+
     def filename(self, suffix):
         return "20bn-{}-{}-{}".format(self.name, self.version, suffix)
 
