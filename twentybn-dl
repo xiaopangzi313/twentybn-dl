@@ -6,6 +6,7 @@ from urllib.request import urlretrieve
 import concurrent.futures
 from collections import namedtuple
 import pprint
+import tarfile
 
 import requests
 from tqdm import tqdm
@@ -121,7 +122,16 @@ class Dataset(object):
                             break
 
     def extract_bigtgz(self):
+        print('Will extract the big tgz.')
         self.ensure_bigtgz_exists()
+
+        with tqdm(total=self.count, unit='records') as pbar:
+            def callback(members):
+                for tarinfo in members:
+                    pbar.update(1)
+                    yield tarinfo
+            with tarfile.open(self.big_tgz, 'r|gz') as tar:
+                tar.extractall(path=self.tmp_dir, members=callback(tar))
 
 class ExecutorResultProcessor(object):
 
