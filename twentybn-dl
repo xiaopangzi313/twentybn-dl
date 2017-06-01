@@ -73,12 +73,15 @@ class Dataset(object):
 
     def download_chunk(self, url_filename):
         url, filename = url_filename
-        urlretrieve(url, op.join(self.tmp_dir, filename))
+        filepath = op.join(self.tmp_dir, filename)
+        if self.needs_download(url, filepath):
+            print("Downloading: '{}'".format(filename))
+            urlretrieve(url, filepath)
 
-    def download_chunks(self):
-        with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
-            executor.map(self.download_chunk,
-                         tqdm(zip(self.urls, self.filenames)))
+    def download_chunks(self, max_workers=10):
+        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+            executor.map(self.download_chunk, zip(self.urls, self.filenames))
+
 
 
 def suffix_generator(last):
