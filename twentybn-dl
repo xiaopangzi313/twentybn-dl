@@ -92,7 +92,7 @@ def suffix_generator(last):
 
     """
     char_pairs = [''.join(i) for i in
-                  itertools.combinations(LOWERCASE_ALPHABET, 2)]
+                  itertools.combinations_with_replacement(LOWERCASE_ALPHABET, 2)]
     return list(itertools.takewhile(lambda x: x <= last, char_pairs))
 
 
