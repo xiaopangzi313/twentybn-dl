@@ -185,8 +185,6 @@ Jester = Dataset('jester', 'v1', 'au', 100)
 if __name__ == '__main__':
     print("Will download to: '{}'".format(DOWNLOAD_TARGET_BASE))
     os.makedirs(DOWNLOAD_TARGET_BASE, exist_ok=True)
-    print(SomethingSomething.filenames)
-    print(SomethingSomething.tmp_tgz)
     SomethingSomething.download_chunks()
     SomethingSomething.ensure_chunks_exist()
     SomethingSomething.concat_chunks()
