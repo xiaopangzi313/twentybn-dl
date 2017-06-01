@@ -36,8 +36,8 @@ class Dataset(object):
     def __init__(self, name, version, chunks, md5sums, count):
         self.name = name
         self.version = version
-        self.chunks = md5sums
-        self.md5sums
+        self.chunks = chunks
+        self.md5sums = md5sums
         self.count = count
         self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, 'tmp')
         self.big_tgz = op.join(
@@ -61,12 +61,9 @@ class Dataset(object):
             m = "Big TGZ: '{}' is missing".format(self.big_tgz)
             raise MissingBigTGZException(m)
 
-    def filename(self, suffix):
-        return "20bn-{}-{}-{}".format(self.name, self.version, suffix)
-
     @property
     def filenames(self):
-        return [self.filename(s) for s in suffix_generator(self.last)]
+        return self.chunks
 
     def url(self, filename):
         full_path = op.join(self.name, self.version, filename)
@@ -249,6 +246,7 @@ SOMETHING_SOMETHING_MD5SUMS = [
 SomethingSomething = Dataset('something-something',
                              'v1',
                              SOMETHING_SOMETHING_CUNKS,
+                             SOMETHING_SOMETHING_MD5SUMS,
                              134636)
 
 if __name__ == '__main__':
