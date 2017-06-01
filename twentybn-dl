@@ -172,9 +172,10 @@ def suffix_generator(last):
                   itertools.combinations_with_replacement(LOWERCASE_ALPHABET, 2)]
     return list(itertools.takewhile(lambda x: x <= last, char_pairs))
 
+
 DownloadResultProcessor = ExecutorResultProcessor(
         (DOWNLOAD_FAILURE, DOWNLOAD_SUCCESS, DOWNLOAD_UNNEEDED),
-	DOWNLOAD_FAILURE,
+        DOWNLOAD_FAILURE,
         ('Total failures', 'Total downloads', 'Total unneeded'),
 )
 
