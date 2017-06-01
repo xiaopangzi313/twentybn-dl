@@ -26,6 +26,9 @@ DownloadResult = namedtuple('DownloadResult', ['result', 'filename', 'reason'])
 class MissingChunksException(Exception):
     pass
 
+class MissingBigTGZException(Exception):
+    pass
+
 
 class Dataset(object):
     """ Dataset on S3 accessible via HTTP. """
@@ -35,7 +38,7 @@ class Dataset(object):
         self.version = version
         self.last = last
         self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, self.name, 'tmp')
-        self.tmp_tgz = op.join(
+        self.big_tgz = op.join(
             self.tmp_dir,
             "20bn-{}-{}.tgz".format(self.name, self.version)
         )
@@ -50,6 +53,12 @@ class Dataset(object):
             if not op.isfile(chunk_path):
                 message = "Chunk: '{}' is missing!".format(chunk_path)
                 raise MissingChunksException(message)
+
+    def ensure_bigtgz_exists(self):
+        if not op.isfile(self.big_tgz):
+            m = "Big TGZ: '{}' is missing".format(self.big_tgz)
+            raise MissingBigTGZException(m)
+
 
     def filename(self, suffix):
         return "20bn-{}-{}-{}".format(self.name, self.version, suffix)
@@ -113,6 +122,9 @@ class Dataset(object):
                         target.write(read_bytes)
                         if len(read_bytes) < read_chunk_size:
                             break
+
+    def extract_bigtgz(self):
+        self.ensure_bigtgz_exists()
 
 class ExecutorResultProcessor(object):
 
