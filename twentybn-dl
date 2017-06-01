@@ -5,6 +5,7 @@ import itertools
 from urllib.parse import urljoin
 from urllib.request import urlretrieve
 import concurrent.futures
+from collections import namedtuple
 
 import requests
 from tqdm import tqdm
@@ -13,6 +14,12 @@ from tqdm import tqdm
 HTTP_ENDPOINT_BASE = "https://s3-eu-west-1.amazonaws.com/20bn-public-datasets/"
 DOWNLOAD_TARGET_BASE = op.expandvars('$HOME/20bn-datasets')
 LOWERCASE_ALPHABET = ''.join([chr(i) for i in range(97, 123)])
+
+DOWNLOAD_FAILURE = 0
+DOWNLOAD_SUCCESS = 1
+DOWNLOAD_UNNEEDED = 2
+DownloadResult = namedtuple('DownloadResult', ['result', 'filename', 'reason'])
+
 
 
 class MissingChunksException(Exception):
@@ -64,26 +71,37 @@ class Dataset(object):
             return True
         else:
             response = requests.head(url)
-            remote_size = response.headers['content-length']
+            remote_size = int(response.headers['Content-Length'])
             local_size = op.getsize(filepath)
-            if remote_size != local_size:
+            if remote_size > local_size:
                 return True
             else:
                 return False
 
     def download_chunk(self, url_filename):
         url, filename = url_filename
-        filepath = op.join(self.tmp_dir, filename)
-        if self.needs_download(url, filepath):
-            print("Downloading: '{}'".format(filename))
-            urlretrieve(url, filepath)
+        try:
+            filepath = op.join(self.tmp_dir, filename)
+            needs_dl = self.needs_download(url, filepath)
+            if needs_dl:
+                print("Downloading: '{}'".format(filename))
+                urlretrieve(url, filepath)
+                return DownloadResult(DOWNLOAD_SUCCESS, filename, None)
+            else:
+                print("Not Downloading: '{}'".format(filename))
+                return DownloadResult(DOWNLOAD_UNNEEDED, filename, None)
+        except Exception as e:
+            return DownloadResult(DOWNLOAD_FAILURE, filename, repr(e))
 
-    def download_chunks(self, max_workers=10):
+    def download_chunks(self, max_workers=30):
+        print('Will now download chunks.')
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
-            executor.map(self.download_chunk, zip(self.urls, self.filenames))
+            result = executor.map(self.download_chunk, zip(self.urls, self.filenames))
+        print(list(result))
 
     def concat_chunks(self, keep=True, read_chunk_size=65536):
         self.ensure_chunks_exist()
+        print('Will now concatenate chunks.')
         with open(self.tmp_tgz, 'wb') as target:
             for f in self.filenames:
                 chunk_path = op.join(self.tmp_dir, f)
