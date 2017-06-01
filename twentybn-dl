@@ -82,6 +82,17 @@ class Dataset(object):
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
             executor.map(self.download_chunk, zip(self.urls, self.filenames))
 
+    def concat_chunks(self, keep=True, read_chunk_size=65536):
+        self.ensure_chunks_exist()
+        with open(self.tmp_tgz, 'wb') as target:
+            for f in self.filenames:
+                chunk_path = op.join(self.tmp_dir, f)
+                with open(chunk_path, 'rb') as source:
+                    while True:
+                        read_bytes = source.read(read_chunk_size)
+                        target.write(read_bytes)
+                        if len(read_bytes) < read_chunk_size:
+                            break
 
 
 def suffix_generator(last):
@@ -103,4 +114,7 @@ Jester = Dataset('jester', 'v1', 'au')
 if __name__ == '__main__':
     print("Will download to: '{}'".format(DOWNLOAD_TARGET_BASE))
     os.makedirs(DOWNLOAD_TARGET_BASE, exist_ok=True)
+    print(SomethingSomething.filenames)
+    print(SomethingSomething.tmp_tgz)
     SomethingSomething.download_chunks()
+    SomethingSomething.ensure_chunks_exist()
