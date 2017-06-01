@@ -9,6 +9,7 @@ LOWERCASE_ALPHABET = ''.join([chr(i) for i in range(97, 123)])
 
 
 class Dataset(object):
+    """ Dataset on S3 accessible via HTTP. """
 
     def __init__(self, name, version, last):
         self.name = name
@@ -25,6 +26,12 @@ class Dataset(object):
 
 
 def suffix_generator(last):
+    """ Generate filename suffixes.
+
+    Will genrate combination of two letter suffixes, starting at 'aa' and
+    finishing at last.
+
+    """
     char_pairs = [''.join(i) for i in
                   itertools.combinations(LOWERCASE_ALPHABET, 2)]
     return list(itertools.takewhile(lambda x: x <= last, char_pairs))
