@@ -26,6 +26,10 @@ class Dataset(object):
         self.version = version
         self.last = last
         self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, self.name, 'tmp')
+        self.tmp_tgz = op.join(
+            self.tmp_dir,
+            "20bn-{}-{}.tgz".format(self.name, self.version)
+        )
         self.ensure_directories_exist()
 
     def ensure_directories_exist(self):
