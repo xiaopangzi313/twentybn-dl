@@ -22,9 +22,9 @@ DOWNLOAD_UNNEEDED = 2
 DownloadResult = namedtuple('DownloadResult', ['result', 'filename', 'reason'])
 
 
-
 class MissingChunksException(Exception):
     pass
+
 
 class MissingBigTGZException(Exception):
     pass
@@ -59,7 +59,6 @@ class Dataset(object):
         if not op.isfile(self.big_tgz):
             m = "Big TGZ: '{}' is missing".format(self.big_tgz)
             raise MissingBigTGZException(m)
-
 
     def filename(self, suffix):
         return "20bn-{}-{}-{}".format(self.name, self.version, suffix)
