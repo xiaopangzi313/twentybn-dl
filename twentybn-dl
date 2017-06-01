@@ -37,7 +37,7 @@ class Dataset(object):
         self.name = name
         self.version = version
         self.last = last
-        self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, self.name, 'tmp')
+        self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, 'tmp')
         self.big_tgz = op.join(
             self.tmp_dir,
             "20bn-{}-{}.tgz".format(self.name, self.version)
@@ -112,7 +112,7 @@ class Dataset(object):
     def concat_chunks(self, keep=True, read_chunk_size=65536):
         self.ensure_chunks_exist()
         print('Will now concatenate chunks.')
-        with open(self.tmp_tgz, 'wb') as target:
+        with open(self.big_tgz, 'wb') as target:
             for f in self.filenames:
                 chunk_path = op.join(self.tmp_dir, f)
                 with open(chunk_path, 'rb') as source:
