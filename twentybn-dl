@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import os.path as op
 import itertools
 
@@ -15,14 +16,25 @@ class Dataset(object):
         self.name = name
         self.version = version
         self.last = last
-        self._init_files()
+        self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, self.name, 'tmp')
+        self.init_files()
+        self.ensure_directories_exist()
 
-    def _init_files(self):
-        self.files = [self._filename(s)
+    def init_files(self):
+        self.files = [self.filename(s)
                       for s in suffix_generator(self.last)]
 
-    def _filename(self, suffix):
+    def filename(self, suffix):
         return "20bn-{}-{}-{}".format(self.name, self.version, suffix)
+
+    def ensure_directories_exist(self):
+        os.makedirs(self.tmp_dir, exist_ok=True)
+
+    def urls(self):
+        pass
+
+    def download_chunks(self):
+        pass
 
 
 def suffix_generator(last):
@@ -43,3 +55,4 @@ Jester = Dataset('jester', 'v1', 'au')
 
 if __name__ == '__main__':
     print("Will download to: '{}'".format(DOWNLOAD_TARGET_BASE))
+    os.makedirs(DOWNLOAD_TARGET_BASE, exist_ok=True)
