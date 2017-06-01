@@ -158,18 +158,6 @@ class ExecutorResultProcessor(object):
             print(pprint.pformat(failures))
 
 
-def suffix_generator(last):
-    """ Generate filename suffixes.
-
-    Will genrate combination of two letter suffixes, starting at 'aa' and
-    finishing at last.
-
-    """
-    char_pairs = [''.join(i) for i in
-                  itertools.combinations_with_replacement(LOWERCASE_ALPHABET, 2)]
-    return list(itertools.takewhile(lambda x: x <= last, char_pairs))
-
-
 DownloadResultProcessor = ExecutorResultProcessor(
         (DOWNLOAD_FAILURE, DOWNLOAD_SUCCESS, DOWNLOAD_UNNEEDED),
         DOWNLOAD_FAILURE,
