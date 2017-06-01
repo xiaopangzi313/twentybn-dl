@@ -33,10 +33,11 @@ class MissingBigTGZException(Exception):
 class Dataset(object):
     """ Dataset on S3 accessible via HTTP. """
 
-    def __init__(self, name, version, last):
+    def __init__(self, name, version, last, count):
         self.name = name
         self.version = version
         self.last = last
+        self.count = count
         self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, 'tmp')
         self.big_tgz = op.join(
             self.tmp_dir,
@@ -177,8 +178,8 @@ DownloadResultProcessor = ExecutorResultProcessor(
         ('Total failures', 'Total downloads', 'Total unneeded'),
 )
 
-SomethingSomething = Dataset('something-something', 'v1', 'be')
-Jester = Dataset('jester', 'v1', 'au')
+SomethingSomething = Dataset('something-something', 'v1', 'be', 134636)
+Jester = Dataset('jester', 'v1', 'au', 100)
 
 
 if __name__ == '__main__':
