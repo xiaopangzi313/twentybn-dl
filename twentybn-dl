@@ -6,6 +6,7 @@ from urllib.parse import urljoin
 from urllib.request import urlretrieve
 import concurrent.futures
 from collections import namedtuple
+import pprint
 
 import requests
 from tqdm import tqdm
@@ -96,8 +97,8 @@ class Dataset(object):
     def download_chunks(self, max_workers=30):
         print('Will now download chunks.')
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
-            result = executor.map(self.download_chunk, zip(self.urls, self.filenames))
-        print(list(result))
+            result = list(executor.map(self.download_chunk, zip(self.urls, self.filenames)))
+        DownloadResultProcessor.process_and_print(result)
 
     def concat_chunks(self, keep=True, read_chunk_size=65536):
         self.ensure_chunks_exist()
@@ -112,6 +113,39 @@ class Dataset(object):
                         if len(read_bytes) < read_chunk_size:
                             break
 
+class ExecutorResultProcessor(object):
+
+    def __init__(self,
+                 possible_results,
+                 failure_index,
+                 result_descriptions
+                 ):
+        assert len(possible_results) == len(result_descriptions)
+        self.possible_results = possible_results
+        self.failure_index = failure_index
+        self.result_descriptions = result_descriptions
+
+    def process_and_print(self, results):
+        counts, failures = self.process_results(results)
+        self.print_processed_results(counts, failures)
+        return len(failures) != 0
+
+    def process_results(self, results):
+        counts = {i: 0 for i in self.possible_results}
+        failures = []
+        for r in results:
+            counts[r.result] += 1
+            if r.result == self.failure_index:
+                failures.append(r)
+        return counts, failures
+
+    def print_processed_results(self, counts, failures):
+        for p, d in zip(self.possible_results, self.result_descriptions):
+            print('{}: {}'.  format(d, counts[p]))
+        if failures:
+            print('Failures:')
+            print(pprint.pformat(failures))
+
 
 def suffix_generator(last):
     """ Generate filename suffixes.
@@ -124,6 +158,11 @@ def suffix_generator(last):
                   itertools.combinations_with_replacement(LOWERCASE_ALPHABET, 2)]
     return list(itertools.takewhile(lambda x: x <= last, char_pairs))
 
+DownloadResultProcessor = ExecutorResultProcessor(
+        (DOWNLOAD_FAILURE, DOWNLOAD_SUCCESS, DOWNLOAD_UNNEEDED),
+	DOWNLOAD_FAILURE,
+        ('Total failures', 'Total downloads', 'Total unneeded'),
+)
 
 SomethingSomething = Dataset('something-something', 'v1', 'be')
 Jester = Dataset('jester', 'v1', 'au')
@@ -136,3 +175,4 @@ if __name__ == '__main__':
     print(SomethingSomething.tmp_tgz)
     SomethingSomething.download_chunks()
     SomethingSomething.ensure_chunks_exist()
+    SomethingSomething.concat_chunks()
