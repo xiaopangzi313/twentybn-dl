@@ -14,6 +14,10 @@ DOWNLOAD_TARGET_BASE = op.expandvars('$HOME/20bn-datasets')
 LOWERCASE_ALPHABET = ''.join([chr(i) for i in range(97, 123)])
 
 
+class MissingChunksException(Exception):
+    pass
+
+
 class Dataset(object):
     """ Dataset on S3 accessible via HTTP. """
 
