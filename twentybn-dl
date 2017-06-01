@@ -57,6 +57,19 @@ class Dataset(object):
     def urls(self):
         return [self.url(f) for f in self.filenames]
 
+    @staticmethod
+    def needs_download(url, filepath):
+        if not op.exists(filepath):
+            return True
+        else:
+            response = requests.head(url)
+            remote_size = response.headers['content-length']
+            local_size = op.getsize(filepath)
+            if remote_size != local_size:
+                return True
+            else:
+                return False
+
     def download_chunk(self, url_filename):
         url, filename = url_filename
         urlretrieve(url, op.join(self.tmp_dir, filename))
