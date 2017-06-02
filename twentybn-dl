@@ -52,9 +52,17 @@ class Dataset(object):
         self.md5sums = md5sums
         self.count = count
         self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, 'tmp')
+        self.final_dir = op.join(
+            DOWNLOAD_TARGET_BASE,
+            "20bn-{}-{}".format(self.name, self.version)
+        )
         self.big_tgz = op.join(
             self.tmp_dir,
             "20bn-{}-{}.tgz".format(self.name, self.version)
+        )
+        self.tar_dir = op.join(
+            self.tmp_dir,
+            "20bn-{}-{}".format(self.name, self.version)
         )
         self.ensure_directories_exist()
 
@@ -152,6 +160,18 @@ class Dataset(object):
                     yield tarinfo
             with tarfile.open(self.big_tgz, 'r|gz') as tar:
                 tar.extractall(path=self.tmp_dir, members=callback(tar))
+
+    def extract_record_tar(self, tar_path):
+        with tarfile.open(tar_path) as tar:
+            tar.extractall(self.final_dir)
+
+    def extract_record_tars(self, max_workers=30):
+        tar_files = [op.join(self.tar_dir, t)
+                     for t in os.listdir(self.tar_dir)]
+
+        with ProcessPoolExecutor(max_workers=max_workers) as executor:
+            result = list(executor.map(self.extract_record_tar,  tar_files))
+            print(result)
 
 
 class ExecutorResultProcessor(object):
