@@ -4,7 +4,8 @@ import os.path as op
 from urllib.parse import urljoin
 from urllib.request import urlretrieve
 from concurrent.futures import ProcessPoolExecutor
-from collections import namedtuple
+from multiprocessing import Pool
+from collections import namedtuple, Counter
 import pprint
 import tarfile
 import hashlib
@@ -162,16 +163,21 @@ class Dataset(object):
                 tar.extractall(path=self.tmp_dir, members=callback(tar))
 
     def extract_record_tar(self, tar_path):
-        with tarfile.open(tar_path) as tar:
-            tar.extractall(self.final_dir)
+        try:
+            with tarfile.open(tar_path, 'r|') as tar:
+                tar.extractall(self.final_dir)
+            return 1
+        except Exception as e:
+            return 0
 
     def extract_record_tars(self, max_workers=30):
+        print('Will extract the record tars.')
+        os.makedirs(self.final_dir, exist_ok=True)
         tar_files = [op.join(self.tar_dir, t)
                      for t in os.listdir(self.tar_dir)]
-
-        with ProcessPoolExecutor(max_workers=max_workers) as executor:
-            result = list(executor.map(self.extract_record_tar,  tar_files))
-            print(result)
+        p = Pool(30)
+        result = p.map(self.extract_record_tar,  tqdm(tar_files, units='records'), chunksize=5)
+        print(Counter(result))
 
 
 class ExecutorResultProcessor(object):
