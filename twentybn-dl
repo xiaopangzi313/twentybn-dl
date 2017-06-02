@@ -176,7 +176,7 @@ class Dataset(object):
         tar_files = [op.join(self.tar_dir, t)
                      for t in os.listdir(self.tar_dir)]
         p = Pool(30)
-        result = p.map(self.extract_record_tar,  tqdm(tar_files, units='records'), chunksize=5)
+        result = p.map(self.extract_record_tar,  tqdm(tar_files, unit='records'), chunksize=5)
         print(Counter(result))
 
 
