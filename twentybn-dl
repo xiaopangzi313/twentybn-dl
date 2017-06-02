@@ -49,8 +49,8 @@ class Dataset(object):
         os.makedirs(self.tmp_dir, exist_ok=True)
 
     def ensure_chunks_exist(self):
-        for f in self.filenames:
-            chunk_path = op.join(self.tmp_dir, f)
+        for c in self.chunks:
+            chunk_path = op.join(self.tmp_dir, c)
             if not op.isfile(chunk_path):
                 message = "Chunk: '{}' is missing!".format(chunk_path)
                 raise MissingChunksException(message)
@@ -60,17 +60,13 @@ class Dataset(object):
             m = "Big TGZ: '{}' is missing".format(self.big_tgz)
             raise MissingBigTGZException(m)
 
-    @property
-    def filenames(self):
-        return self.chunks
-
     def url(self, filename):
         full_path = op.join(self.name, self.version, filename)
         return urljoin(HTTP_ENDPOINT_BASE, full_path)
 
     @property
     def urls(self):
-        return [self.url(f) for f in self.filenames]
+        return [self.url(f) for f in self.chunks]
 
     @staticmethod
     def needs_download(url, filepath):
@@ -104,14 +100,14 @@ class Dataset(object):
         print('Will now download chunks.')
         with ProcessPoolExecutor(max_workers=max_workers) as executor:
             result = list(executor.map(self.download_chunk,
-                                       zip(self.urls, self.filenames)))
+                                       zip(self.urls, self.chunks)))
         DownloadResultProcessor.process_and_print(result)
 
     def concat_chunks(self, keep=True, read_chunk_size=65536):
         self.ensure_chunks_exist()
         print('Will now concatenate chunks.')
         with open(self.big_tgz, 'wb') as target:
-            for f in self.filenames:
+            for f in self.chunks:
                 chunk_path = op.join(self.tmp_dir, f)
                 with open(chunk_path, 'rb') as source:
                     print("Now appending: '{}'".format(f))
