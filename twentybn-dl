@@ -7,6 +7,7 @@ from concurrent.futures import ProcessPoolExecutor
 from collections import namedtuple
 import pprint
 import tarfile
+import hashlib
 
 import requests
 from tqdm import tqdm
@@ -27,6 +28,18 @@ class MissingChunksException(Exception):
 
 class MissingBigTGZException(Exception):
     pass
+
+
+class MD5Mismatch(Exception):
+    pass
+
+
+def md5(filename):
+    hash_md5 = hashlib.md5()
+    with open(filename, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
 
 
 class Dataset(object):
@@ -54,6 +67,17 @@ class Dataset(object):
             if not op.isfile(chunk_path):
                 message = "Chunk: '{}' is missing!".format(chunk_path)
                 raise MissingChunksException(message)
+
+    def ensure_chunk_md5sums_match(self):
+        for c, m in zip(self.chunks, self.md5sums):
+            chunk_path = op.join(self.tmp_dir, c)
+            expected = m
+            received = md5(chunk_path)
+            if received != expected:
+                m = "MD5 Mismatch detected for: '{}'".format(chunk_path)
+                MD5Mismatch()
+            else:
+                print("MD5 match for: '{}'".format(chunk_path))
 
     def ensure_bigtgz_exists(self):
         if not op.isfile(self.big_tgz):
