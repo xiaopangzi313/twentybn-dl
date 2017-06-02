@@ -3,7 +3,7 @@ import os
 import os.path as op
 from urllib.parse import urljoin
 from urllib.request import urlretrieve
-import concurrent.futures
+from concurrent.futures import ProcessPoolExecutor
 from collections import namedtuple
 import pprint
 import tarfile
@@ -103,8 +103,9 @@ class Dataset(object):
 
     def download_chunks(self, max_workers=30):
         print('Will now download chunks.')
-        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
-            result = list(executor.map(self.download_chunk, zip(self.urls, self.filenames)))
+        with ProcessPoolExecutor(max_workers=max_workers) as executor:
+            result = list(executor.map(self.download_chunk,
+                                       zip(self.urls, self.filenames)))
         DownloadResultProcessor.process_and_print(result)
 
     def concat_chunks(self, keep=True, read_chunk_size=65536):
@@ -132,6 +133,7 @@ class Dataset(object):
                     yield tarinfo
             with tarfile.open(self.big_tgz, 'r|gz') as tar:
                 tar.extractall(path=self.tmp_dir, members=callback(tar))
+
 
 class ExecutorResultProcessor(object):
 
