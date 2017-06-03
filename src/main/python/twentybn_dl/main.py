@@ -296,6 +296,7 @@ SomethingSomething = Dataset('something-something',
 if __name__ == '__main__':
     print("Will download to: '{}'".format(DOWNLOAD_TARGET_BASE))
     os.makedirs(DOWNLOAD_TARGET_BASE, exist_ok=True)
-    SomethingSomething.download_chunks()
-    SomethingSomething.ensure_chunks_exist()
-    SomethingSomething.concat_chunks()
+    #SomethingSomething.download_chunks()
+    #SomethingSomething.ensure_chunks_exist()
+    #SomethingSomething.concat_chunks()
+    SomethingSomething.ensure_chunk_md5sums_match()
