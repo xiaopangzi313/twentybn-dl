@@ -46,7 +46,22 @@ Details
 =======
 
 By default, the Datasets will be downloaded to ``$HOME/20bn-datasets``. Any
-temporary files will reside in a ``tmp`` directory in that dorectory.
+temporary files will reside in a ``tmp`` directory in that directory.
+
+
+So, for example, the following will contain the directories each of which represent a
+video that was split into JPG images:
+
+.. code::
+
+    ~/20bn-datasets/20bn-jester-v1
+
+Whereas the following contains any temporary files, e.g. bigtgz files:
+
+.. code::
+
+    ~/20bn-datasets/tmp/
+
 
 License
 =======
