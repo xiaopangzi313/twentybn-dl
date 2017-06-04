@@ -6,6 +6,10 @@ from tqdm import tqdm
 DEFAULT_BLOCKSIZE = 1024 * 8
 
 
+class ContentLengthNotSupportedException(Exception):
+    pass
+
+
 class BigTGZStreamer(object):
 
     def __init__(self,
@@ -24,7 +28,12 @@ class BigTGZStreamer(object):
     def total_blocks_and_bytes(self):
         total_blocks, total_bytes = 0, 0
         for u in self.input_urls:
-            remote_size = int(requests.head(u).headers['Content-Length'])
+            head_response_headers = requests.head(u).headers
+            if 'Content-Length' not in head_response_headers:
+                m = "The url: '{}' doesn't support the 'Content-Length' field.".format(u)
+                raise ContentLengthNotSupportedException(m)
+            else:
+                remote_size = int(head_response_headers['Content-Length'])
             total_bytes += remote_size
             num_blocks, last_block_size = divmod(remote_size, self.blocksize)
             total_blocks += num_blocks
