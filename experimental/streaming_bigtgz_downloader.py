@@ -55,7 +55,7 @@ class BigTGZStreamer(object):
         self.output_md5sum = output_md5sum
         self.blocksize = blocksize
 
-    def get_total_blocks_and_bytes(self):
+    def total_blocks_and_bytes(self):
         total_blocks, total_bytes = 0, 0
         for f in FILES:
             remote_size = int(requests.head(URL+f).headers['Content-Length'])
@@ -77,7 +77,7 @@ class BigTGZStreamer(object):
 
     def get(self):
         with open(self.output_file, 'wb') as fp:
-            total_blocks, total_bytes = self.get_total_blocks_and_bytes()
+            total_blocks, total_bytes = self.total_blocks_and_bytes()
             pbar = tqdm(total=total_bytes,
                         unit='bytes',
                         ncols=80,
