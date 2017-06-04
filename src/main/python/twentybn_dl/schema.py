@@ -30,17 +30,27 @@ class TwentyBNDatasetSchema(object):
         self.chunk_md5sums = chunk_md5sums
         self.bigtgz_md5sum = bigtgz_md5sum
         self.base_url = base_url
-        self.storage = storage
-
-        self.tmpdir = op.join(self.storage, 'tmp')
-        self.bigtgz = op.join(self.tmpdir,
-                              "20bn-{}-{}.tgz".format(name, version))
-
-        self.ensure_directories_exist()
+        self._storage = storage
 
     def ensure_directories_exist(self):
         os.makedirs(self.storage, exist_ok=True)
         os.makedirs(self.tmpdir, exist_ok=True)
+
+    @property
+    def tmpdir(self):
+        tmpdir = op.join(self.storage, 'tmp')
+        os.makedirs(tmpdir, exist_ok=True)
+        return tmpdir
+
+    @property
+    def storage(self):
+        os.makedirs(self._storage, exist_ok=True)
+        return self._storage
+
+    @property
+    def bigtgz(self):
+        return op.join(self.tmpdir,
+                       "20bn-{}-{}.tgz".format(self.name, self.version))
 
     def url(self, filename):
         full_path = op.join(self.name, self.version, filename)
