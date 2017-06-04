@@ -3,9 +3,9 @@ import tarfile
 from tqdm import tqdm
 
 
-def extract_bigtgz(self, bigtgz, size, out_path):
+def extract_bigtgz(bigtgz, size, out_path):
     with tarfile.open(bigtgz, 'r|gz') as tar:
-        with tqdm(total=self.count, unit='records') as pbar:
+        with tqdm(total=size, unit='records', ncols=80, unit_scale=True) as pbar:
             def callback(members):
                 for tarinfo in members:
                     pbar.update(1)

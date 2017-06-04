@@ -22,8 +22,8 @@ def main():
         or DATASETS_AVAILABLE.values()
 
     if arguments['get']:
-        for d in dsets.values():
+        for d in dsets:
             d.get_bigtgz()
     if arguments['extract']:
-        for d in dsets.values():
+        for d in dsets:
             d.extract_bigtgz()
