@@ -1,10 +1,6 @@
 #!/bin/sh
 
 BASE_URL="https://s3-eu-west-1.amazonaws.com/20bn-public-datasets"
-BIGTGZ="20bn-something-something-v1.tgz"
-TAR_BASE="20bn-something-something-v1"
-BIGTGZ_SIZE="30677157329"
-TGZ_EXPECTED="134636"
 
 CHUNKS="20bn-something-something-v1-aa
 20bn-something-something-v1-ab
@@ -39,26 +35,6 @@ CHUNKS="20bn-something-something-v1-aa
 
 for c in $CHUNKS
 do
-  wget -nv -c "$BASE_URL/something-something/v1/$c"
+  wget -nv -c "$BASE_URL/something-something/v0/$c"
 done
-
-if [ $(stat --printf="%s" $BIGTGZ) -eq $BIGTGZ_SIZE ] ; then
-    echo "$BIGTGZ is (probably) up to date"
-else
-    echo "will not cat chunks..."
-    cat $CHUNKS > $BIGTGZ
-    echo "done."
-fi
-
-if [ $( find $TAR_BASE -name '*.tar' | wc -l ) -eq $TGZ_EXPECTED ] ; then
-    echo "tar files are (probably) up to date"
-else
-    tar xvzf $BIGTGZ
-fi
-
-for f in $( find $TAR_BASE -name '*.tar')
-do
-  tar -C 20bn-something-something-v1/ -xvf $f
-done
-
-
+cat $CHUNKS | tar xvzf
