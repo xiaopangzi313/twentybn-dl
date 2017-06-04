@@ -39,7 +39,7 @@ To download and extract the *bigtgz* file for the *jester* dataset, use:
 
 .. code::
 
-    $ twentybn fetch jester
+    $ twentybn-dl fetch jester
     ...
 
 Details
