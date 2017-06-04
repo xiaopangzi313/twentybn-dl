@@ -25,6 +25,7 @@ class TwentyBNDatasetSchema(object):
         self.name = name
         self.version = version
         self.size = size
+        self.jpegs = jpegs
         self.chunks = chunks
         self.chunk_md5sums = chunk_md5sums
         self.bigtgz_md5sum = bigtgz_md5sum
@@ -34,15 +35,12 @@ class TwentyBNDatasetSchema(object):
         self.tmpdir = op.join(self.storage, 'tmp')
         self.bigtgz = op.join(self.tmpdir,
                               "20bn-{}-{}.tgz".format(name, version))
-        self.out_path = op.join(self.storage,
-                                "20bn-{}-{}".format(name, version))
 
         self.ensure_directories_exist()
 
     def ensure_directories_exist(self):
         os.makedirs(self.storage, exist_ok=True)
         os.makedirs(self.tmpdir, exist_ok=True)
-        os.makedirs(self.out_path, exist_ok=True)
 
     def url(self, filename):
         full_path = op.join(self.name, self.version, filename)
@@ -62,4 +60,4 @@ class TwentyBNDatasetSchema(object):
         bigtgz_streamer.get()
 
     def extract_bigtgz(self):
-        extract_bigtgz(self.bigtgz, self.jpegs, self.out_path)
+        extract_bigtgz(self.bigtgz, self.jpegs, self.storage)
