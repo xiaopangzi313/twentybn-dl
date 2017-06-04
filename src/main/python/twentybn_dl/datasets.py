@@ -125,7 +125,7 @@ JESTER_MD5SUMS = [
     'fbca1e224e2d25213036dbc70264367d',
 ]
 
-JESTER_BIGTGZ_MD5SUM = "569624e1c96872933e3e46be15f7e53e"
+JESTER_BIGTGZ_MD5SUM = "895a374aea2c2da982c7f2213181eb20"
 
 JesterSchema = TwentyBNDatasetSchema(
     name='jester',
