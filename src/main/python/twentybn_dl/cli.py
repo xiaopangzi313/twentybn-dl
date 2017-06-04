@@ -19,7 +19,6 @@ from twentybn_dl.datasets import DATASETS_AVAILABLE
 
 def main():
     arguments = docopt(__doc__)
-    print(arguments)
     dsets = [DATASETS_AVAILABLE[k] for k in arguments['<dataset>']] \
         or DATASETS_AVAILABLE.values()
 
