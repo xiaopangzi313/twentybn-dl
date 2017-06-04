@@ -3,7 +3,7 @@ from urllib.request import urlopen
 from tqdm import tqdm
 
 BLOCKSIZE = 1024 * 8
-URL = "https://s3-eu-west-1.amazonaws.com/20bn-public-datasets/something-something/v1/"
+URL = "https://s3-eu-west-1.amazonaws.com/20bn-public-datasets/something-something/v0/"
 BIGTGZ = "20bn-something-something-v1.tgz"
 FILES = [
     '20bn-something-something-v1-aa',
@@ -40,15 +40,18 @@ FILES = [
 ]
 
 
-def get_total_blocks():
-    total = 0
+def get_total_blocks_and_bytes():
+    total_blocks = 0
+    total_bytes = 0
     for f in FILES:
         remote_size = int(requests.head(URL+f).headers['Content-Length'])
-        total_blocks, last_block_size = divmod(remote_size, BLOCKSIZE)
-        total += total_blocks
+        total_bytes += remote_size
+        num_blocks, last_block_size = divmod(remote_size, BLOCKSIZE)
+        total_blocks += num_blocks
         if last_block_size:
-            total += 1
-    return total
+            total_blocks += 1
+        
+    return total_blocks, total_bytes
 
 
 def stream_to_file(url, file_pointer, pbar):
@@ -58,11 +61,11 @@ def stream_to_file(url, file_pointer, pbar):
         if not block:
             break
         file_pointer.write(block)
-        pbar.update()
+        pbar.update(len(block))
 
 
 with open(BIGTGZ, 'wb') as fp:
-    pbar = tqdm(total=get_total_blocks(), unit='blocks')
+    total_blocks, total_bytes = get_total_blocks_and_bytes()
+    pbar = tqdm(total=total_bytes, unit='bytes', ncols=80, unit_scale=True)
     for f in FILES:
-        print(f)
         stream_to_file(URL+f, fp, pbar)
