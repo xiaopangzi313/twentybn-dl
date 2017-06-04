@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 def extract_bigtgz(bigtgz, size, out_path):
     with tarfile.open(bigtgz, 'r|gz') as tar:
-        with tqdm(total=size, unit='records', ncols=80, unit_scale=True) as pbar:
+        with tqdm(total=size, unit='images', ncols=80, unit_scale=True) as pbar:
             def callback(members):
                 for tarinfo in members:
                     pbar.update(1)
