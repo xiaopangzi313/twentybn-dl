@@ -33,8 +33,8 @@ class TwentyBNDatasetSchema(object):
         self.tmpdir = op.join(self.storage, 'tmp')
         self.bigtgz = op.join(self.tmpdir,
                               "20bn-{}-{}.tgz".format(name, version))
-        self.outt_path = op.join(self.storage,
-                                 "20bn-{}-{}".format(name, version))
+        self.out_path = op.join(self.storage,
+                                "20bn-{}-{}".format(name, version))
 
         self.ensure_directories_exist()
 
