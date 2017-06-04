@@ -70,11 +70,72 @@ SOMETHING_SOMETHING_MD5SUMS = [
 SOMETHING_SOMETHING_BIGTGZ_MD5SUM = "569624e1c96872933e3e46be15f7e53e"
 SomethingSomethingSchema = TwentyBNDatasetSchema(
     name='something-something',
-    version='v1',
+    version='v0',
     size=134636,
     chunks=SOMETHING_SOMETHING_CUNKS,
     chunk_md5sums=SOMETHING_SOMETHING_MD5SUMS,
     bigtgz_md5sum=SOMETHING_SOMETHING_BIGTGZ_MD5SUM,
     )
 
-DATASETS_AVAILABLE = {SomethingSomethingSchema.name: SomethingSomethingSchema}
+JESTER_CHUNKS = [
+    '20bn-jester-v1-00',
+    '20bn-jester-v1-01',
+    '20bn-jester-v1-02',
+    '20bn-jester-v1-03',
+    '20bn-jester-v1-04',
+    '20bn-jester-v1-05',
+    '20bn-jester-v1-06',
+    '20bn-jester-v1-07',
+    '20bn-jester-v1-08',
+    '20bn-jester-v1-09',
+    '20bn-jester-v1-10',
+    '20bn-jester-v1-11',
+    '20bn-jester-v1-12',
+    '20bn-jester-v1-13',
+    '20bn-jester-v1-14',
+    '20bn-jester-v1-15',
+    '20bn-jester-v1-16',
+    '20bn-jester-v1-17',
+    '20bn-jester-v1-18',
+    '20bn-jester-v1-19',
+    '20bn-jester-v1-20',
+]
+
+JESTER_MD5SUMS = [
+    'ce09687012898c0deb6060f7812eecd5',
+    'c094c80d69a43d96196dea2389a3ce3c',
+    '2fe6f9d9f82bb738a9a3e37378eb0b25',
+    'c8ab8ee247af9263cb0e6428f0309ecb',
+    '284623a650ce3d3eaee6ebf6974ad198',
+    '96ff35f06f5d1a0c2c42672dc7a24188',
+    '9d1641b398ed5f23e2b62908b8ea0a17',
+    '4ac1368aa88e52751c1aa0963bb59cb3',
+    '265dce4bb2ca6280c578dc42ae523fa7',
+    '0f697fdb762854c5b627b4e94e478dc3',
+    '13aa85f616757ae8a80be2e0bff75cc2',
+    '972925b5e16f54994596ce37bd79bdbb',
+    '4b4b982859bcd7232999c1632a492427',
+    '38cde22fc7e40a527056684750679f06',
+    'a0d5a7ba743e9a652f0e4177c88e5521',
+    '38cf91e6dd140d8739f5ce50f176146b',
+    'b462f472d3f187ad104438cf3ea79e1c',
+    '56a23463648d66413f8ab25439f4593c',
+    '8c8f6a83ddf00786e3cd685fd3b8592a',
+    '6a23c2e6887104cbe761036f61080d51',
+    'fbca1e224e2d25213036dbc70264367d',
+]
+
+JESTER_BIGTGZ_MD5SUM = "569624e1c96872933e3e46be15f7e53e"
+
+JesterSchema = TwentyBNDatasetSchema(
+    name='jester',
+    version='v1',
+    size=134799,
+    chunks=JESTER_CHUNKS,
+    chunk_md5sums=JESTER_MD5SUMS,
+    bigtgz_md5sum=JESTER_BIGTGZ_MD5SUM,
+    )
+
+DATASETS_AVAILABLE = {SomethingSomethingSchema.name: SomethingSomethingSchema,
+                      JesterSchema.name: JesterSchema
+                      }

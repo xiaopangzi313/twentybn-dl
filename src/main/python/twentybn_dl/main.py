@@ -229,5 +229,3 @@ DownloadResultProcessor = ExecutorResultProcessor(
         DOWNLOAD_FAILURE,
         ('Total failures', 'Total downloads', 'Total unneeded'),
 )
-
-
