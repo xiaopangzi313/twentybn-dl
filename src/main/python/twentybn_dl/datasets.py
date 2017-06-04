@@ -73,6 +73,8 @@ SomethingSomethingSchema = TwentyBNDatasetSchema(
     version='v1',
     size=134636,
     chunks=SOMETHING_SOMETHING_CUNKS,
-    shunk_md5sums=SOMETHING_SOMETHING_MD5SUMS,
+    chunk_md5sums=SOMETHING_SOMETHING_MD5SUMS,
     bigtgz_md5sum=SOMETHING_SOMETHING_BIGTGZ_MD5SUM,
     )
+
+DATASETS_AVAILABLE = {SomethingSomethingSchema.name: SomethingSomethingSchema}
