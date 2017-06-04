@@ -46,11 +46,12 @@ def md5(filename):
 class Dataset(object):
     """ Dataset on S3 accessible via HTTP. """
 
-    def __init__(self, name, version, chunks, md5sums, count):
+    def __init__(self, name, version, chunks, md5sums, bigtgz_md5sum, count):
         self.name = name
         self.version = version
         self.chunks = chunks
         self.md5sums = md5sums
+        self.bigtgz_md5sum = bigtgz_md5sum
         self.count = count
         self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, 'tmp')
         self.final_dir = op.join(
@@ -84,7 +85,7 @@ class Dataset(object):
             received = md5(chunk_path)
             if received != expected:
                 m = "MD5 Mismatch detected for: '{}'".format(chunk_path)
-                MD5Mismatch()
+                MD5Mismatch(m)
             else:
                 print("MD5 match for: '{}'".format(chunk_path))
 
@@ -92,6 +93,15 @@ class Dataset(object):
         if not op.isfile(self.big_tgz):
             m = "Big TGZ: '{}' is missing".format(self.big_tgz)
             raise MissingBigTGZException(m)
+
+    def ensure_bigtgz_md5sum_match(self):
+        expected = self.bigtgz_md5sum
+        received = md5(self.big_tgz)
+        if received != expected:
+            m = "MD5 Mismatch detected for: '{}'".format(self.big_tgz)
+            MD5Mismatch(m)
+        else:
+            print("MD5 match for: '{}'".format(self.big_tgz))
 
     def url(self, filename):
         full_path = op.join(self.name, self.version, filename)
@@ -287,16 +297,11 @@ SOMETHING_SOMETHING_MD5SUMS = [
     'cc58710e4c7bc38ffd6ab6d4166bd169',
     '071a8919da2a5b8582424dbc9679f7c4',
 ]
+SOMETHING_SOMETHING_BIGTGZ_MD5SUM = "569624e1c96872933e3e46be15f7e53e"
 SomethingSomething = Dataset('something-something',
                              'v1',
                              SOMETHING_SOMETHING_CUNKS,
                              SOMETHING_SOMETHING_MD5SUMS,
+                             SOMETHING_SOMETHING_BIGTGZ_MD5SUM,
                              134636)
 
-if __name__ == '__main__':
-    print("Will download to: '{}'".format(DOWNLOAD_TARGET_BASE))
-    os.makedirs(DOWNLOAD_TARGET_BASE, exist_ok=True)
-    #SomethingSomething.download_chunks()
-    #SomethingSomething.ensure_chunks_exist()
-    #SomethingSomething.concat_chunks()
-    SomethingSomething.ensure_chunk_md5sums_match()
