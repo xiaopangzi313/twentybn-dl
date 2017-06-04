@@ -103,33 +103,35 @@ class BigTGZStreamer(object):
                 total_blocks += 1
         return total_blocks, total_bytes
 
-    def stream_to_file(self, url, md5sum, file_pointer, pbar):
+    def stream_to_file(self, url, md5sum, file_pointer, file_checksum, pbar):
         url_pointer = urlopen(url)
-        if md5sum:
-            hash_md5 = hashlib.md5()
+        url_checksum = hashlib.md5()
         while True:
             block = url_pointer.read(self.blocksize)
             if not block:
                 break
             file_pointer.write(block)
-            if md5sum:
-                hash_md5.update(block)
+            url_checksum.update(block)
+            file_checksum.update(block)
             pbar.update(len(block))
-        if md5sum and hash_md5.hexdigest() != md5sum:
+        if url_checksum.hexdigest() != md5sum:
             raise Exception
-        else:
-            print('md5sum ok')
 
     def get(self):
-        with open(self.output_file, 'wb') as fp:
+        with open(self.output_file, 'wb') as output_pointer:
+            output_checksum = hashlib.md5()
             total_blocks, total_bytes = self.total_blocks_and_bytes()
             pbar = tqdm(total=total_bytes,
                         unit='bytes',
                         ncols=80,
                         unit_scale=True,
                         )
-            for u in self.input_urls:
-                self.stream_to_file(u, fp, pbar)
+            for url, md5 in zip(self.input_urls, self.input_urls_md5sums):
+                self.stream_to_file(url, md5, output_pointer, output_checksum, pbar)
+            if output_checksum.hexdigest() != output_md5sum:
+                raise Exception
+            else:
+                print("Final checksum matches!")
 
 
 if __name__ == '__main__':
