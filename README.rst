@@ -45,8 +45,8 @@ To download and extract the *bigtgz* file for the *jester* dataset, use:
 Details
 =======
 
-By default, the Datasets will be downloaded to `$HOME/20bn-datasets`. Any
-temporary files will reside in a `tmp` directory in that dorectory.
+By default, the Datasets will be downloaded to ``$HOME/20bn-datasets``. Any
+temporary files will reside in a ``tmp`` directory in that dorectory.
 
 License
 =======
