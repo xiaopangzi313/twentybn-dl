@@ -19,18 +19,21 @@ from twentybn_dl.datasets import DATASETS_AVAILABLE
 
 def main():
     arguments = docopt(__doc__)
-    dsets = [DATASETS_AVAILABLE[k] for k in arguments['<dataset>']] \
-        or DATASETS_AVAILABLE.values()
+    dsets = arguments['<dataset>'] or DATASETS_AVAILABLE.keys()
 
     if arguments['get']:
         for d in dsets:
-            print("Will now get bigtgz for: '{}'".format(d.name))
-            d.get_bigtgz()
+            print("Will now get bigtgz for: '{}'".format(d))
+            s = DATASETS_AVAILABLE[d]
+            s.get_bigtgz()
     if arguments['extract']:
         for d in dsets:
-            print("Will now extract bigtgz for: '{}'".format(d.name))
-            d.extract_bigtgz()
+            print("Will now extract bigtgz for: '{}'".format(d))
+            s = DATASETS_AVAILABLE[d]
+            s.extract_bigtgz()
     if arguments['fetch']:
         for d in dsets:
-            print("Will get and extract bigtgz for: '{}'".format(d.name))
-            d.extract_bigtgz()
+            print("Will get and extract bigtgz for: '{}'".format(d))
+            s = DATASETS_AVAILABLE[d]
+            s.get_bigtgz()
+            s.extract_bigtgz()
