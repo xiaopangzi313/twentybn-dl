@@ -1,3 +1,4 @@
+import hashlib
 import requests
 from urllib.request import urlopen
 from tqdm import tqdm
@@ -66,14 +67,22 @@ class BigTGZStreamer(object):
                 total_blocks += 1
         return total_blocks, total_bytes
 
-    def stream_to_file(self, url, file_pointer, pbar):
+    def stream_to_file(self, url, md5sum, file_pointer, pbar):
         url_pointer = urlopen(url)
+        if md5sum:
+            hash_md5 = hashlib.md5()
         while True:
             block = url_pointer.read(self.blocksize)
             if not block:
                 break
             file_pointer.write(block)
+            if md5sum:
+                hash_md5.update(block)
             pbar.update(len(block))
+        if md5sum and hash_md5.hexdigest() != md5sum:
+            raise Exception
+        else:
+            print('md5sum ok')
 
     def get(self):
         with open(self.output_file, 'wb') as fp:
@@ -81,7 +90,8 @@ class BigTGZStreamer(object):
             pbar = tqdm(total=total_bytes,
                         unit='bytes',
                         ncols=80,
-                        unit_scale=True)
+                        unit_scale=True,
+                        )
             for u in self.input_urls:
                 self.stream_to_file(u, fp, pbar)
 
