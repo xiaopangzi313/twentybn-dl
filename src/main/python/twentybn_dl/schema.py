@@ -70,4 +70,4 @@ class TwentyBNDatasetSchema(object):
         bigtgz_streamer.get()
 
     def extract_bigtgz(self):
-        extract_bigtgz(self.bigtgz, self.jpegs, self.storage)
+        extract_bigtgz(self.bigtgz, self.size + self.jpegs, self.storage)
