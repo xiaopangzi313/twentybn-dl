@@ -50,7 +50,6 @@ def get_total_blocks_and_bytes():
         total_blocks += num_blocks
         if last_block_size:
             total_blocks += 1
-        
     return total_blocks, total_bytes
 
 
