@@ -16,3 +16,4 @@ default_task = "publish"
 def set_properties(project):
     project.depends_on('requests')
     project.depends_on('tqdm')
+    project.depends_on('docopt')
