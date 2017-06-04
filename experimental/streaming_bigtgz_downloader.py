@@ -128,7 +128,7 @@ class BigTGZStreamer(object):
                         )
             for url, md5 in zip(self.input_urls, self.input_urls_md5sums):
                 self.stream_to_file(url, md5, output_pointer, output_checksum, pbar)
-            if output_checksum.hexdigest() != output_md5sum:
+            if output_checksum.hexdigest() != self.output_md5sum:
                 raise Exception
             else:
                 print("Final checksum matches!")
