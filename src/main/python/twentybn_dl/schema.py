@@ -15,6 +15,7 @@ class TwentyBNDatasetSchema(object):
                  name=None,
                  version=None,
                  size=None,
+                 jpegs=None,
                  chunks=None,
                  chunk_md5sums=None,
                  bigtgz_md5sum=None,
