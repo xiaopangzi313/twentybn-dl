@@ -111,54 +111,6 @@ class Dataset(object):
     def urls(self):
         return [self.url(f) for f in self.chunks]
 
-    @staticmethod
-    def needs_download(url, filepath):
-        if not op.exists(filepath):
-            return True
-        else:
-            response = requests.head(url)
-            remote_size = int(response.headers['Content-Length'])
-            local_size = op.getsize(filepath)
-            if remote_size > local_size:
-                return True
-            else:
-                return False
-
-    def download_chunk(self, url_filename):
-        url, filename = url_filename
-        try:
-            filepath = op.join(self.tmp_dir, filename)
-            needs_dl = self.needs_download(url, filepath)
-            if needs_dl:
-                print("Downloading: '{}'".format(filename))
-                urlretrieve(url, filepath)
-                return DownloadResult(DOWNLOAD_SUCCESS, filename, None)
-            else:
-                print("Not Downloading: '{}'".format(filename))
-                return DownloadResult(DOWNLOAD_UNNEEDED, filename, None)
-        except Exception as e:
-            return DownloadResult(DOWNLOAD_FAILURE, filename, repr(e))
-
-    def download_chunks(self, max_workers=30):
-        print('Will now download chunks.')
-        with ProcessPoolExecutor(max_workers=max_workers) as executor:
-            result = list(executor.map(self.download_chunk,
-                                       zip(self.urls, self.chunks)))
-        DownloadResultProcessor.process_and_print(result)
-
-    def concat_chunks(self, keep=True, read_chunk_size=65536):
-        self.ensure_chunks_exist()
-        print('Will now concatenate chunks.')
-        with open(self.big_tgz, 'wb') as target:
-            for f in self.chunks:
-                chunk_path = op.join(self.tmp_dir, f)
-                with open(chunk_path, 'rb') as source:
-                    print("Now appending: '{}'".format(f))
-                    while True:
-                        read_bytes = source.read(read_chunk_size)
-                        target.write(read_bytes)
-                        if len(read_bytes) < read_chunk_size:
-                            break
 
     def extract_bigtgz(self):
         print('Will extract the big tgz.')
@@ -190,42 +142,16 @@ class Dataset(object):
         print(Counter(result))
 
 
-class ExecutorResultProcessor(object):
-
-    def __init__(self,
-                 possible_results,
-                 failure_index,
-                 result_descriptions
-                 ):
-        assert len(possible_results) == len(result_descriptions)
-        self.possible_results = possible_results
-        self.failure_index = failure_index
-        self.result_descriptions = result_descriptions
-
-    def process_and_print(self, results):
-        counts, failures = self.process_results(results)
-        self.print_processed_results(counts, failures)
-        return len(failures) != 0
-
-    def process_results(self, results):
-        counts = {i: 0 for i in self.possible_results}
-        failures = []
-        for r in results:
-            counts[r.result] += 1
-            if r.result == self.failure_index:
-                failures.append(r)
-        return counts, failures
-
-    def print_processed_results(self, counts, failures):
-        for p, d in zip(self.possible_results, self.result_descriptions):
-            print('{}: {}'.  format(d, counts[p]))
-        if failures:
-            print('Failures:')
-            print(pprint.pformat(failures))
-
-
-DownloadResultProcessor = ExecutorResultProcessor(
-        (DOWNLOAD_FAILURE, DOWNLOAD_SUCCESS, DOWNLOAD_UNNEEDED),
-        DOWNLOAD_FAILURE,
-        ('Total failures', 'Total downloads', 'Total unneeded'),
-)
+    def concat_chunks(self, keep=True, read_chunk_size=65536):
+        self.ensure_chunks_exist()
+        print('Will now concatenate chunks.')
+        with open(self.big_tgz, 'wb') as target:
+            for f in self.chunks:
+                chunk_path = op.join(self.tmp_dir, f)
+                with open(chunk_path, 'rb') as source:
+                    print("Now appending: '{}'".format(f))
+                    while True:
+                        read_bytes = source.read(read_chunk_size)
+                        target.write(read_bytes)
+                        if len(read_bytes) < read_chunk_size:
+                            break

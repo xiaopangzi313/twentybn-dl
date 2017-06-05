@@ -1,13 +1,15 @@
 """twentybn-dl
 
 Usage:
-    twentybn-dl get [<dataset>...]
-    twentybn-dl extract [<dataset>...]
+    twentybn-dl get-bigtgz [<dataset>...]
+    twentybn-dl get-chunks [<dataset>...]
+    twentybn-dl extract-bigtgz [<dataset>...]
     twentybn-dl fetch [<dataset>...]
 
 Subcommands:
-    get : Download bigtgz file(s).
-    extract: Extract the bigtgz file(s).
+    get-bigtgz : Download bigtgz file(s).
+    get-chunks : Download bigtgz chunks.
+    extract-bigtgz: Extract the bigtgz file(s).
     fetch: Download and extract the bigtgz file(s).
 
 """
@@ -21,12 +23,17 @@ def main():
     arguments = docopt(__doc__)
     dsets = arguments['<dataset>'] or DATASETS_AVAILABLE.keys()
 
-    if arguments['get']:
+    if arguments['get-bigtgz']:
         for d in dsets:
             print("Will now get bigtgz for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
             s.get_bigtgz()
-    if arguments['extract']:
+    if arguments['get-chunks']:
+        for d in dsets:
+            print("Will now get chunks for: '{}'".format(d))
+            s = DATASETS_AVAILABLE[d]
+            s.get_chunks()
+    if arguments['extract-bigtgz']:
         for d in dsets:
             print("Will now extract bigtgz for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
