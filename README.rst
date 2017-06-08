@@ -12,20 +12,20 @@ Install
 
 There are many ways to setup a Python environment for installation. Here we
 outline an approach using *virtualenvironment*. Note: this package does not
-support legacy Python and will only work with Python 3.x
+support legacy Python and will only work with Python 3.x.
 
 The following will setup a virtualenvironment and activate it:
 
 .. code::
 
-    python -m venv twentybn-dl
-    source twentybn-dl/bin/activate
+    $ python -m venv twentybn-dl
+    $ source twentybn-dl/bin/activate
 
 Then, install the package using:
 
 .. code::
 
-    pip install twentybn-dl
+    $ pip install twentybn-dl
 
 Usage
 =====
