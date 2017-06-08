@@ -30,29 +30,25 @@ from .datasets import DATASETS_AVAILABLE
 from .defaults import DEFAULT_STORAGE, DEFAULT_BASE_URL
 
 
-def get_chunks(dsets):
-    for d in dsets:
-        print("Will now get chunks for: '{}'".format(d.name))
-        d.get_chunks()
+def get_chunks(d):
+    print("Will now get chunks for: '{}'".format(d.name))
+    d.get_chunks()
 
 
-def md5_chunks(dsets):
-    for d in dsets:
-        print("Will check md5 sums for chunks for: '{}'".format(d.name))
-        ok = d.check_chunk_md5sum()
-        if not ok:
-            raise Exception("Some files failed their md5sum check, "
-                            "please see above and delete them manually.")
+def md5_chunks(d):
+    print("Will check md5 sums for chunks for: '{}'".format(d.name))
+    ok = d.check_chunk_md5sum()
+    if not ok:
+        raise Exception("Some files failed their md5sum check, "
+                        "please see above and delete them manually.")
 
 
-def extract_chunks(dsets):
-    for d in dsets:
-        print("Will now extract chunks for: '{}'".format(d.name))
-        d.extract_chunks()
+def extract_chunks(d):
+    print("Will now extract chunks for: '{}'".format(d.name))
+    d.extract_chunks()
 
 
-def remove_tmp(dsets):
-    for d in dsets:
+def remove_tmp(d):
         print("Will now remove temporary files for  for: '{}'".format(d.name))
         d.remove_tmp()
 
@@ -82,18 +78,23 @@ def main():
         for d in dsets:
             print(d.pformat())
     if arguments['get-chunks']:
-        get_chunks(dsets)
+        for d in dsets:
+            get_chunks(d)
     if arguments['md5-chunks']:
-        md5_chunks(dsets)
+        for d in dsets:
+            md5_chunks(d)
     if arguments['extract-chunks']:
-        extract_chunks(dsets)
+        for d in dsets:
+            extract_chunks(d)
     if arguments['remove-tmp']:
-        remove_tmp(dsets)
+        for d in dsets:
+            remove_tmp(d)
     if arguments['obtain']:
-        get_chunks(dsets)
-        md5_chunks(dsets)
-        extract_chunks(dsets)
-        remove_tmp(dsets)
+        for d in dsets:
+            get_chunks(d)
+            md5_chunks(d)
+            extract_chunks(d)
+            remove_tmp(d)
 
 # Unused bigtgz stuff
 #    twentybn-dl get-bigtgz [<dataset>...]
