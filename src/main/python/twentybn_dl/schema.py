@@ -2,7 +2,7 @@ import os
 import os.path as op
 from urllib.parse import urljoin
 
-from .networking import BigTGZStreamer, ParallelChunkDownloader
+from .networking import BigTGZStreamer, ParallelChunkDownloader, WGETDownloader
 from .extract import extract_bigtgz
 
 DEFAULT_BASE_URL = "https://s3-eu-west-1.amazonaws.com/20bn-public-datasets/"
@@ -70,8 +70,7 @@ class TwentyBNDatasetSchema(object):
         bigtgz_streamer.get()
 
     def get_chunks(self):
-        output_paths = [op.join(self.tmpdir, f) for f in self.chunks]
-        downloader = ParallelChunkDownloader(self.urls, self.chunk_md5sums, output_paths)
+        downloader = WGETDownloader(self.urls, self.tmpdir)
         downloader.download_chunks()
 
     def extract_bigtgz(self):
