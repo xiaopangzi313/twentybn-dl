@@ -74,7 +74,7 @@ def main():
             s = DATASETS_AVAILABLE[d]
             s.get_bigtgz()
             s.extract_bigtgz()
-    if arguments['remove_tmp']:
+    if arguments['remove-tmp']:
         remove_tmp([DATASETS_AVAILABLE[d] for d in dsets])
 
     sys.exit(EXIT)
