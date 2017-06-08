@@ -38,7 +38,7 @@ def main():
             print("Will now extract bigtgz for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
             s.extract_bigtgz()
-    if arguments['fetch']:
+    if arguments['fetch-bigtgz']:
         for d in dsets:
             print("Will get and extract bigtgz for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
