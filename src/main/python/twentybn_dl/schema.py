@@ -79,14 +79,14 @@ class TwentyBNDatasetSchema(object):
         downloader.download_chunks()
 
     def check_chunk_md5sum(self):
-        fails = False
+        ok = True
         for c, m in zip(self.chunk_paths, self.chunk_md5sums):
             if md5(c) == m:
                 print("MD5 sum matches for: '{}'".format(c))
             else:
                 print("MD5 sum mismatch for: '{}'".format(c))
-                fails = True
-        return fails
+                ok = False
+        return ok
 
     def extract_bigtgz(self):
         extract_bigtgz(self.bigtgz, self.size + self.jpegs, self.storage)

@@ -20,13 +20,16 @@ Subcommands:
     fetch: Download and extract the bigtgz file(s).
 
 """
+import sys
 
 from docopt import docopt
 
 from twentybn_dl.datasets import DATASETS_AVAILABLE
 
 
+
 def main():
+    EXIT = 0
     arguments = docopt(__doc__)
     dsets = arguments['<dataset>'] or DATASETS_AVAILABLE.keys()
 
@@ -54,10 +57,14 @@ def main():
         for d in dsets:
             print("Will check md5 sums for chunks for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
-            s.check_chunk_md5sum()
+            ok = s.check_chunk_md5sum()
+            if not ok:
+                print("Some files failed their md5sum check, please see above and delete them manually.")
+                EXIT = 1
     if arguments['fetch']:
         for d in dsets:
             print("Will get and extract bigtgz for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
             s.get_bigtgz()
             s.extract_bigtgz()
+    sys.exit(EXIT)
