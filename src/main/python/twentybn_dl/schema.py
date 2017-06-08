@@ -70,15 +70,6 @@ class TwentyBNDatasetSchema(object):
     def chunk_paths(self):
         return [op.join(self.tmpdir, c) for c in self.chunks]
 
-    def get_bigtgz(self):
-        bigtgz_streamer = BigTGZStreamer(
-            self.urls,
-            self.chunk_md5sums,
-            self.bigtgz,
-            self.bigtgz_md5sum,
-        )
-        bigtgz_streamer.get()
-
     def get_chunks(self):
         downloader = WGETDownloader(self.urls, self.tmpdir)
         downloader.download_chunks()
@@ -99,6 +90,19 @@ class TwentyBNDatasetSchema(object):
                 ok = False
         return ok
 
+    def extract_chunks(self):
+        self.ensure_chunks_exist()
+        extract_chunks(self.chunk_paths, self.jpegs, self.storage)
+
+    def get_bigtgz(self):
+        bigtgz_streamer = BigTGZStreamer(
+            self.urls,
+            self.chunk_md5sums,
+            self.bigtgz,
+            self.bigtgz_md5sum,
+        )
+        bigtgz_streamer.get()
+
     def ensure_bigtgz_exists(self):
         if not op.isfile(self.big_tgz):
             m = "Big TGZ: '{}' is missing".format(self.big_tgz)
@@ -106,10 +110,6 @@ class TwentyBNDatasetSchema(object):
 
     def extract_bigtgz(self):
         extract_bigtgz(self.bigtgz, self.size + self.jpegs, self.storage)
-
-    def extract_chunks(self):
-        self.ensure_chunks_exist()
-        extract_chunks(self.chunk_paths, self.jpegs, self.storage)
 
     def remove_tmp(self):
         for c in self.chunk_paths:
