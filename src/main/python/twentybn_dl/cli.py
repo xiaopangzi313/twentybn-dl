@@ -4,6 +4,7 @@ Usage:
     twentybn-dl get-bigtgz [<dataset>...]
     twentybn-dl get-chunks [<dataset>...]
     twentybn-dl extract-bigtgz [<dataset>...]
+    twentybn-dl extract-chunks [<dataset>...]
     twentybn-dl fetch [<dataset>...]
 
 Subcommands:
@@ -38,7 +39,12 @@ def main():
             print("Will now extract bigtgz for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
             s.extract_bigtgz()
-    if arguments['fetch-bigtgz']:
+    if arguments['extract-chunks']:
+        for d in dsets:
+            print("Will now extract bigtgz for: '{}'".format(d))
+            s = DATASETS_AVAILABLE[d]
+            s.extract_chunks()
+    if arguments['fetch']:
         for d in dsets:
             print("Will get and extract bigtgz for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
