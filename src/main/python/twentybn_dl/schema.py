@@ -85,7 +85,6 @@ class TwentyBNDatasetSchema(object):
                 message = "Chunk: '{}' is missing!".format(c)
                 raise MissingChunksException(message)
 
-
     def check_chunk_md5sum(self):
         ok = True
         for c, m in zip(self.chunk_paths, self.chunk_md5sums):
