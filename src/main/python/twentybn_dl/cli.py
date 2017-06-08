@@ -72,6 +72,7 @@ def main():
     dsets = [DATASETS_AVAILABLE[d] for d in dsets]
     base_url = arguments['--base-url'] or DEFAULT_BASE_URL
     storage = normalize_storage_argument(arguments['--storage'])
+    print("Using: '{}' as storage.".format(storage))
     for d in dsets:
         d._storage = storage
         d.base_url = base_url
