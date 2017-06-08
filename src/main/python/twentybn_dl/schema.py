@@ -99,6 +99,7 @@ class TwentyBNDatasetSchema(object):
         extract_bigtgz(self.bigtgz, self.size + self.jpegs, self.storage)
 
     def extract_chunks(self):
+        self.ensure_chunks_exist()
         extract_chunks(self.chunk_paths, self.jpegs, self.storage)
 
     def remove_tmp(self):
