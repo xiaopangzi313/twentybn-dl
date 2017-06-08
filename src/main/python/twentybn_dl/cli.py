@@ -41,7 +41,7 @@ def main():
             s.extract_bigtgz()
     if arguments['extract-chunks']:
         for d in dsets:
-            print("Will now extract bigtgz for: '{}'".format(d))
+            print("Will now extract chunks for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
             s.extract_chunks()
     if arguments['fetch']:
