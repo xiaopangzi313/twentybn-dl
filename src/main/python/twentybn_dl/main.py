@@ -25,8 +25,6 @@ DownloadResult = namedtuple('DownloadResult', ['result', 'filename', 'reason'])
 
 
 
-class MissingBigTGZException(Exception):
-    pass
 
 
 class MD5Mismatch(Exception):
@@ -79,11 +77,6 @@ class Dataset(object):
                 MD5Mismatch(m)
             else:
                 print("MD5 match for: '{}'".format(chunk_path))
-
-    def ensure_bigtgz_exists(self):
-        if not op.isfile(self.big_tgz):
-            m = "Big TGZ: '{}' is missing".format(self.big_tgz)
-            raise MissingBigTGZException(m)
 
     def ensure_bigtgz_md5sum_match(self):
         expected = self.bigtgz_md5sum

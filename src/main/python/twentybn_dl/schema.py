@@ -11,6 +11,10 @@ class MissingChunksException(Exception):
     pass
 
 
+class MissingBigTGZException(Exception):
+    pass
+
+
 class TwentyBNDatasetSchema(object):
 
     def __init__(self,
@@ -94,6 +98,11 @@ class TwentyBNDatasetSchema(object):
                 print("MD5 sum mismatch for: '{}'".format(c))
                 ok = False
         return ok
+
+    def ensure_bigtgz_exists(self):
+        if not op.isfile(self.big_tgz):
+            m = "Big TGZ: '{}' is missing".format(self.big_tgz)
+            raise MissingBigTGZException(m)
 
     def extract_bigtgz(self):
         extract_bigtgz(self.bigtgz, self.size + self.jpegs, self.storage)
