@@ -14,7 +14,7 @@ def extract_bigtgz(bigtgz, size, out_path):
             tar.extractall(path=out_path, members=callback(tar))
 
 
-def extract_chunks(self, files, num_images):
+def extract_chunks(files, num_images):
 
     with tqdm(total=num_images,
               unit='images',
