@@ -18,9 +18,11 @@ Subcommands:
 
 Options:
    -s --storage=STORAGE  Storage location for datasets
-   -u --url-base=URL     Base URL for donwloads
+   -u --base-url=URL     Base URL for donwloads
 
 """
+import os
+import os.path as op
 from docopt import docopt
 
 from .datasets import DATASETS_AVAILABLE
@@ -54,15 +56,21 @@ def remove_tmp(dsets):
         d.remove_tmp()
 
 
+def normalize_storage_argument(storage):
+    if storage:
+        return op.join(os.getcwd(), storage) if not op.isabs(storage) else storage
+    else:
+        return DEFAULT_STORAGE
+
 def main():
     arguments = docopt(__doc__)
     print(arguments)
     dsets = arguments['<dataset>'] or DATASETS_AVAILABLE.keys()
     dsets = [DATASETS_AVAILABLE[d] for d in dsets]
-    storage = arguments['--storage'] or DEFAULT_STORAGE
     base_url = arguments['--base-url'] or DEFAULT_BASE_URL
+    storage = normalize_storage_argument(arguments['--storage'])
     for d in dsets:
-        d.storage = storage
+        d._storage = storage
         d.base_url = base_url
 
     if arguments['get-chunks']:
@@ -77,7 +85,7 @@ def main():
         get_chunks(dsets)
         md5_chunks(dsets)
         extract_chunks(dsets)
-        remove_tmp()
+        remove_tmp(dsets)
 
 # Unused bigtgz stuff
 #    twentybn-dl get-bigtgz [<dataset>...]
