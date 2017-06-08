@@ -3,6 +3,7 @@ import hashlib
 from collections import namedtuple
 import pprint
 from multiprocessing.pool import Pool
+from concurrent.futures import ProcessPoolExecutor
 from urllib.request import urlopen
 import atexit
 import signal
