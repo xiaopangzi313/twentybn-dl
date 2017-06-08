@@ -3,7 +3,7 @@ from collections import namedtuple
 import unittest
 from unittest import mock
 
-from twentybn_dl.main import ExecutorResultProcessor
+from twentybn_dl.network import ExecutorResultProcessor
 
 
 class TestExecutorResultProcessor(unittest.TestCase):
@@ -59,9 +59,9 @@ class TestExecutorResultProcessor(unittest.TestCase):
         )
 
     @mock.patch(
-        'twentybn_dl.main.ExecutorResultProcessor.process_results')
+        'twentybn_dl.network.ExecutorResultProcessor.process_results')
     @mock.patch(
-        'twentybn_dl.main.ExecutorResultProcessor.print_processed_results')
+        'twentybn_dl.network.ExecutorResultProcessor.print_processed_results')
     def test_process_and_print(self,
                                mock_print_processed_results,
                                mock_process_results,
