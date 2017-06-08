@@ -20,6 +20,6 @@ def extract_chunks(self, files, num_images):
               unit='images',
               ncols=80,
               unit_scale=True) as pbar:
-        for line in tar(cat(files, _piped=True), 'xvf', _iter=True):
+        for line in tar(cat(files, _piped=True), 'xvz', _iter=True):
             if line.endswith('.jpg'):
                 pbar.update(1)
