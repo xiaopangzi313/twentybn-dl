@@ -4,6 +4,7 @@ from urllib.parse import urljoin
 
 from .networking import BigTGZStreamer, ParallelChunkDownloader, WGETDownloader
 from .extract import extract_bigtgz, extract_chunks
+from .utils import md5
 
 DEFAULT_BASE_URL = "https://s3-eu-west-1.amazonaws.com/20bn-public-datasets/"
 DEFAULT_STORAGE = op.expandvars('$HOME/20bn-datasets')
@@ -60,6 +61,10 @@ class TwentyBNDatasetSchema(object):
     def urls(self):
         return [self.url(f) for f in self.chunks]
 
+    @property
+    def chunk_paths(self):
+        return  [op.join(self.tmpdir, c) for c in self.chunks]
+
     def get_bigtgz(self):
         bigtgz_streamer = BigTGZStreamer(
             self.urls,
@@ -73,9 +78,18 @@ class TwentyBNDatasetSchema(object):
         downloader = WGETDownloader(self.urls, self.tmpdir)
         downloader.download_chunks()
 
+    def check_chunk_md5sum(self):
+        fails = False
+        for c, m in zip(self.chunk_paths, self.chunk_md5sums):
+            if md5(c) == m:
+                print("MD5 sum macthes for: '{}'".format())
+            else:
+                print("MD5 sum mismatch for: '{}'".format())
+                fails = True
+        return fails
+
     def extract_bigtgz(self):
         extract_bigtgz(self.bigtgz, self.size + self.jpegs, self.storage)
 
     def extract_chunks(self):
-        files = [op.join(self.tmpdir, c) for c in self.chunks]
-        extract_chunks(files, self.jpegs, self.storage)
+        extract_chunks(self.chunk_paths, self.jpegs, self.storage)

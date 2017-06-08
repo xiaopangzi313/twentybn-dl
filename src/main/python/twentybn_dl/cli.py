@@ -3,14 +3,20 @@
 Usage:
     twentybn-dl get-bigtgz [<dataset>...]
     twentybn-dl get-chunks [<dataset>...]
+    twentybn-dl md5-bigtgz [<dataset>...]
+    twentybn-dl md5-chunks [<dataset>...]
     twentybn-dl extract-bigtgz [<dataset>...]
     twentybn-dl extract-chunks [<dataset>...]
+    twentybn-dl concat-chunks [<dataset>...]
     twentybn-dl fetch [<dataset>...]
 
 Subcommands:
     get-bigtgz : Download bigtgz file(s).
     get-chunks : Download bigtgz chunks.
+    md5-chunks : Check the md5 sums for the chunks.
     extract-bigtgz: Extract the bigtgz file(s).
+    extract-chunks: Extract chunk file(s).
+    concat-chunks: Concatenate chunks into bigtgz
     fetch: Download and extract the bigtgz file(s).
 
 """
@@ -44,6 +50,11 @@ def main():
             print("Will now extract chunks for: '{}'".format(d))
             s = DATASETS_AVAILABLE[d]
             s.extract_chunks()
+    if arguments['md5-chunks']:
+        for d in dsets:
+            print("Will check md5 sums for chunks for: '{}'".format(d))
+            s = DATASETS_AVAILABLE[d]
+            s.check_chunk_md5sum()
     if arguments['fetch']:
         for d in dsets:
             print("Will get and extract bigtgz for: '{}'".format(d))
