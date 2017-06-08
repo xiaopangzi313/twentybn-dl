@@ -78,4 +78,4 @@ class TwentyBNDatasetSchema(object):
 
     def extract_chunks(self):
         files = [op.join(self.tmpdir, c) for c in self.chunks]
-        extract_chunks(files, self.jpegs)
+        extract_chunks(files, self.jpegs, self.storage)
