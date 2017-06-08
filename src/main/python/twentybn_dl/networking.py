@@ -200,5 +200,5 @@ class WGETDownloader(object):
     def download_chunks(self, max_workers=30):
         print('Will now download chunks.')
         with ProcessPoolExecutor(max_workers=max_workers) as executor:
-            result = list(executor.map(self.download_chunk, self.urls))
+            result = list(executor.map(self.get, self.urls))
         DownloadResultProcessor.process_and_print(result)
