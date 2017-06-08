@@ -14,6 +14,12 @@ def extract_bigtgz(bigtgz, size, out_path):
             tar.extractall(path=out_path, members=callback(tar))
 
 
-def extract_chunks(self, files):
-    for line in tar(cat(files, _piped=True), 'xvf', _iter=True):
-        print(line)
+def extract_chunks(self, files, num_images):
+
+    with tqdm(total=num_images,
+              unit='images',
+              ncols=80,
+              unit_scale=True) as pbar:
+        for line in tar(cat(files, _piped=True), 'xvf', _iter=True):
+            if line.endswith('.jpg'):
+                pbar.update(1)
