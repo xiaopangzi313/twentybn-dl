@@ -58,13 +58,15 @@ def remove_tmp(dsets):
 
 def normalize_storage_argument(storage):
     if storage:
-        return op.join(os.getcwd(), storage) if not op.isabs(storage) else storage
+        return (op.join(os.getcwd(), storage)
+                if not op.isabs(storage)
+                else storage)
     else:
         return DEFAULT_STORAGE
 
+
 def main():
     arguments = docopt(__doc__)
-    print(arguments)
     dsets = arguments['<dataset>'] or DATASETS_AVAILABLE.keys()
     dsets = [DATASETS_AVAILABLE[d] for d in dsets]
     base_url = arguments['--base-url'] or DEFAULT_BASE_URL
