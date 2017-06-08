@@ -38,6 +38,11 @@ class TwentyBNDatasetSchema(object):
         self.base_url = base_url
         self._storage = storage
 
+    def pformat(self):
+        return "Name: {}, Version: {}, Size: {}, Jpegs: {}".format(
+            self.name, self.version, self.size, self.jpegs
+        )
+
     def ensure_directories_exist(self):
         os.makedirs(self.storage, exist_ok=True)
         os.makedirs(self.tmpdir, exist_ok=True)

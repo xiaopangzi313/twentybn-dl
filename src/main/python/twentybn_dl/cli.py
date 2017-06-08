@@ -1,6 +1,7 @@
 """twentybn-dl
 
 Usage:
+    twentybn-dl [options] list
     twentybn-dl [options] get-chunks [<dataset>...]
     twentybn-dl [options] md5-chunks [<dataset>...]
     twentybn-dl [options] extract-chunks [<dataset>...]
@@ -75,6 +76,10 @@ def main():
         d._storage = storage
         d.base_url = base_url
 
+    if arguments['list']:
+        print('Available datasets:')
+        for d in dsets:
+            print(d.pformat())
     if arguments['get-chunks']:
         get_chunks(dsets)
     if arguments['md5-chunks']:
