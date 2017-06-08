@@ -93,3 +93,8 @@ class TwentyBNDatasetSchema(object):
 
     def extract_chunks(self):
         extract_chunks(self.chunk_paths, self.jpegs, self.storage)
+
+    def remove_tmp(self):
+        for c in self.chunk_paths:
+            print("Removing: '{}'".format(c))
+            os.remove(c)

@@ -9,6 +9,7 @@ Usage:
     twentybn-dl extract-chunks [<dataset>...]
     twentybn-dl concat-chunks [<dataset>...]
     twentybn-dl fetch [<dataset>...]
+    twentybn-dl remove-tmp [<dataset>...]
 
 Subcommands:
     get-bigtgz : Download bigtgz file(s).
@@ -18,6 +19,7 @@ Subcommands:
     extract-chunks: Extract chunk file(s).
     concat-chunks: Concatenate chunks into bigtgz
     fetch: Download and extract the bigtgz file(s).
+    remove-tmp: Remove all temporary files.
 
 """
 import sys
@@ -26,6 +28,11 @@ from docopt import docopt
 
 from twentybn_dl.datasets import DATASETS_AVAILABLE
 
+
+def remove_tmp(dsets):
+    for d in dsets:
+        print("Will now remove temporary files for  for: '{}'".format(d.name))
+        d.remove_tmp()
 
 
 def main():
@@ -67,4 +74,7 @@ def main():
             s = DATASETS_AVAILABLE[d]
             s.get_bigtgz()
             s.extract_bigtgz()
+    if arguments['remove_tmp']:
+        remove_tmp([DATASETS_AVAILABLE[d] for d in dsets])
+
     sys.exit(EXIT)
