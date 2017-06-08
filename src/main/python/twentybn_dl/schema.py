@@ -82,9 +82,9 @@ class TwentyBNDatasetSchema(object):
         fails = False
         for c, m in zip(self.chunk_paths, self.chunk_md5sums):
             if md5(c) == m:
-                print("MD5 sum macthes for: '{}'".format())
+                print("MD5 sum matches for: '{}'".format(c))
             else:
-                print("MD5 sum mismatch for: '{}'".format())
+                print("MD5 sum mismatch for: '{}'".format(c))
                 fails = True
         return fails
 
