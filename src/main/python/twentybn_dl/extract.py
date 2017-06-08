@@ -1,4 +1,5 @@
 import tarfile
+import atexit
 
 from sh import cat, tar
 from tqdm import tqdm
@@ -20,6 +21,14 @@ def extract_chunks(files, num_images):
               unit='images',
               ncols=80,
               unit_scale=True) as pbar:
-        for line in tar(cat(files, _piped=True), 'xvz', _iter=True):
+        process = tar(cat(files, _piped=True), 'xvz', _iter=True)
+
+        def kill():
+            try:
+                process.kill()
+            except:
+                pass
+        atexit.register(kill)
+        for line in process:
             if line.endswith('.jpg'):
                 pbar.update(1)
