@@ -30,32 +30,22 @@ Then, install the package using:
 Usage
 =====
 
+Look at the included help:
+
 .. code::
 
-    twentybn-dl
+    $ twentybn-dl -h
 
-    Usage:
-        twentybn-dl [options] get-chunks [<dataset>...]
-        twentybn-dl [options] md5-chunks [<dataset>...]
-        twentybn-dl [options] extract-chunks [<dataset>...]
-        twentybn-dl [options] remove-tmp [<dataset>...]
-        twentybn-dl [options] obtain [<dataset>...]
+Examples
+=========
 
+To list the currently available datasets.
 
-    Subcommands:
-        get-chunks : Download bigtgz chunks.
-        md5-chunks : Check the md5 sums for the chunks.
-        extract-chunks: Extract chunk file(s).
-        remove-tmp: Remove all temporary files.
-        obtain: Download, extract and remove temporary files.
+.. code::
 
+    $ twentybn-dl list
+    ...
 
-    Options:
-       -s --storage=STORAGE  Storage location for datasets
-       -u --base-url=URL     Base URL for donwloads
-
-Example
-=======
 
 To download, extract and remove temporary files for the *jester* dataset, use:
 
