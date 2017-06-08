@@ -195,7 +195,13 @@ class WGETDownloader(object):
     def get(self, url):
         print("Downloading: '{}'".format(url))
         try:
-            process = sh.wget('-q', '-c', '--tries=3', url, _cwd=self.base, _bg=True)
+            process = sh.wget('-q',
+                              '-c',
+                              '--tries=3',
+                              url,
+                              _cwd=self.base,
+                              _bg=True)
+
             def kill():
                 try:
                     process.kill()
