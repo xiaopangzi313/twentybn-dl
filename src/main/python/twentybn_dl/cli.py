@@ -65,14 +65,14 @@ def main():
     if arguments['get-chunks']:
         get_chunks(dsets)
     if arguments['md5-chunks']:
-        md5_chunks()
+        md5_chunks(dsets)
     if arguments['extract-chunks']:
         extract_chunks(dsets)
-    if arguments['remove_tmp']:
-        remove_tmp()
+    if arguments['remove-tmp']:
+        remove_tmp(dsets)
     if arguments['obtain']:
         get_chunks(dsets)
-        md5_chunks()
+        md5_chunks(dsets)
         extract_chunks(dsets)
         remove_tmp()
 
