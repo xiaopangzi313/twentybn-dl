@@ -2,8 +2,10 @@ import os.path as op
 import hashlib
 from collections import namedtuple
 import pprint
-from concurrent.futures import ProcessPoolExecutor
+from multiprocessing.pool import Pool
 from urllib.request import urlopen
+import atexit
+import signal
 
 import requests
 import sh
@@ -192,13 +194,29 @@ class WGETDownloader(object):
     def get(self, url):
         print("Downloading: '{}'".format(url))
         try:
-            sh.wget('-q', '-c', '--tries=3', url, _cwd=self.base)
+            process = sh.wget('-q', '-c', '--tries=3', url, _cwd=self.base, _bg=True)
+            def kill():
+                try:
+                    process.kill()
+                except:
+                    pass
+            atexit.register(kill)
+            process.wait()
             return DownloadResult(DOWNLOAD_SUCCESS, url, None)
         except Exception as e:
             return DownloadResult(DOWNLOAD_FAILURE, url, repr(self.e))
 
-    def download_chunks(self, max_workers=30):
+    def download_chunks(self, max_workers=5):
         print('Will now download chunks.')
-        with ProcessPoolExecutor(max_workers=max_workers) as executor:
-            result = list(executor.map(self.get, self.urls))
-        DownloadResultProcessor.process_and_print(result)
+        original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
+        executor = Pool(max_workers)
+        signal.signal(signal.SIGINT, original_sigint_handler)
+        try:
+            r = executor.map_async(self.get, self.urls)
+            result = list(r.get(43200))
+            DownloadResultProcessor.process_and_print(result)
+        except KeyboardInterrupt:
+            executor.terminate()
+        else:
+            executor.close()
+        executor.join()
