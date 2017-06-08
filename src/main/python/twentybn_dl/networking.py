@@ -6,6 +6,7 @@ from concurrent.futures import ProcessPoolExecutor
 from urllib.request import urlopen
 
 import requests
+import sh
 from tqdm import tqdm
 
 DEFAULT_BLOCKSIZE = 1024 * 8
@@ -180,3 +181,24 @@ DownloadResultProcessor = ExecutorResultProcessor(
         DOWNLOAD_FAILURE,
         ('Total failures', 'Total downloads', 'Total unneeded'),
 )
+
+
+class WGETDownloader(object):
+
+    def __init__(self, urls, base):
+        self.urls = urls
+        self.base = base
+
+    def get(self, url):
+        print("Downloading: '{}'".format(url))
+        try:
+            sh.wget('-q', '-c', '--tries=3', url, _cwd=self.base)
+            return DownloadResult(DOWNLOAD_SUCCESS, url, None)
+        except Exception as e:
+            return DownloadResult(DOWNLOAD_FAILURE, url, repr(self.e))
+
+    def download_chunks(self, max_workers=30):
+        print('Will now download chunks.')
+        with ProcessPoolExecutor(max_workers=max_workers) as executor:
+            result = list(executor.map(self.download_chunk, self.urls))
+        DownloadResultProcessor.process_and_print(result)
