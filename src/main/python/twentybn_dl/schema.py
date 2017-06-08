@@ -2,7 +2,7 @@ import os
 import os.path as op
 from urllib.parse import urljoin
 
-from .networking import BigTGZStreamer, ParallelChunkDownloader, WGETDownloader
+from .network import BigTGZStreamer, ParallelChunkDownloader, WGETDownloader
 from .extract import extract_bigtgz, extract_chunks
 from .utils import md5
 
