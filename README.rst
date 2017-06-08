@@ -19,27 +19,36 @@ Usage
 
 .. code::
 
-    $ twentybn-dl -h
     twentybn-dl
 
     Usage:
-        twentybn-dl get [<dataset>...]
-        twentybn-dl extract [<dataset>...]
-        twentybn-dl fetch [<dataset>...]
+        twentybn-dl [options] get-chunks [<dataset>...]
+        twentybn-dl [options] md5-chunks [<dataset>...]
+        twentybn-dl [options] extract-chunks [<dataset>...]
+        twentybn-dl [options] remove-tmp [<dataset>...]
+        twentybn-dl [options] obtain [<dataset>...]
+
 
     Subcommands:
-        get : Download bigtgz file(s).
-        extract: Extract the bigtgz file(s).
-        fetch: Download and extract the bigtgz file(s).
+        get-chunks : Download bigtgz chunks.
+        md5-chunks : Check the md5 sums for the chunks.
+        extract-chunks: Extract chunk file(s).
+        remove-tmp: Remove all temporary files.
+        obtain: Download, extract and remove temporary files.
+
+
+    Options:
+       -s --storage=STORAGE  Storage location for datasets
+       -u --base-url=URL     Base URL for donwloads
 
 Example
 =======
 
-To download and extract the *bigtgz* file for the *jester* dataset, use:
+To download, extract and remove temporary files for the *jester* dataset, use:
 
 .. code::
 
-    $ twentybn-dl fetch jester
+    $ twentybn-dl obtain jester
     ...
 
 Details
@@ -48,15 +57,14 @@ Details
 By default, the Datasets will be downloaded to ``$HOME/20bn-datasets``. Any
 temporary files will reside in a ``tmp`` directory in that directory.
 
-
-So, for example, the following will contain the directories each of which represent a
-video that was split into JPG images:
+So, for example, the following will contain the directories, each of which
+represent a video that was split into JPG images:
 
 .. code::
 
     ~/20bn-datasets/20bn-jester-v1
 
-Whereas the following contains any temporary files, e.g. bigtgz files:
+Whereas the following contains any temporary files, e.g. chunk files:
 
 .. code::
 
