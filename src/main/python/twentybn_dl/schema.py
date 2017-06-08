@@ -7,6 +7,10 @@ from .extract import extract_bigtgz, extract_chunks
 from .utils import md5
 
 
+class MissingChunksException(Exception):
+    pass
+
+
 class TwentyBNDatasetSchema(object):
 
     def __init__(self,
@@ -60,7 +64,7 @@ class TwentyBNDatasetSchema(object):
 
     @property
     def chunk_paths(self):
-        return  [op.join(self.tmpdir, c) for c in self.chunks]
+        return [op.join(self.tmpdir, c) for c in self.chunks]
 
     def get_bigtgz(self):
         bigtgz_streamer = BigTGZStreamer(
@@ -74,6 +78,13 @@ class TwentyBNDatasetSchema(object):
     def get_chunks(self):
         downloader = WGETDownloader(self.urls, self.tmpdir)
         downloader.download_chunks()
+
+    def ensure_chunks_exist(self):
+        for c in self.chunk_paths:
+            if not op.isfile(c):
+                message = "Chunk: '{}' is missing!".format(c)
+                raise MissingChunksException(message)
+
 
     def check_chunk_md5sum(self):
         ok = True

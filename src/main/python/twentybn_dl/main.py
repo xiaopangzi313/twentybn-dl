@@ -23,8 +23,6 @@ DOWNLOAD_UNNEEDED = 2
 DownloadResult = namedtuple('DownloadResult', ['result', 'filename', 'reason'])
 
 
-class MissingChunksException(Exception):
-    pass
 
 
 class MissingBigTGZException(Exception):
@@ -70,13 +68,6 @@ class Dataset(object):
 
     def ensure_directories_exist(self):
         os.makedirs(self.tmp_dir, exist_ok=True)
-
-    def ensure_chunks_exist(self):
-        for c in self.chunks:
-            chunk_path = op.join(self.tmp_dir, c)
-            if not op.isfile(chunk_path):
-                message = "Chunk: '{}' is missing!".format(chunk_path)
-                raise MissingChunksException(message)
 
     def ensure_chunk_md5sums_match(self):
         for c, m in zip(self.chunks, self.md5sums):
