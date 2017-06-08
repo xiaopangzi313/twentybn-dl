@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 
 from .network import BigTGZStreamer, ParallelChunkDownloader, WGETDownloader
 from .extract import extract_bigtgz, extract_chunks
-from .utils import md5
+from .utils import md5, MD5Mismatch
 
 
 class MissingChunksException(Exception):
@@ -107,6 +107,15 @@ class TwentyBNDatasetSchema(object):
         if not op.isfile(self.big_tgz):
             m = "Big TGZ: '{}' is missing".format(self.big_tgz)
             raise MissingBigTGZException(m)
+
+    def ensure_bigtgz_md5sum_match(self):
+        expected = self.bigtgz_md5sum
+        received = md5(self.big_tgz)
+        if received != expected:
+            m = "MD5 Mismatch detected for: '{}'".format(self.big_tgz)
+            MD5Mismatch(m)
+        else:
+            print("MD5 match for: '{}'".format(self.big_tgz))
 
     def extract_bigtgz(self):
         extract_bigtgz(self.bigtgz, self.size + self.jpegs, self.storage)

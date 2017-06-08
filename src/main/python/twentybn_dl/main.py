@@ -27,8 +27,6 @@ DownloadResult = namedtuple('DownloadResult', ['result', 'filename', 'reason'])
 
 
 
-class MD5Mismatch(Exception):
-    pass
 
 
 def md5(filename):
@@ -78,14 +76,6 @@ class Dataset(object):
             else:
                 print("MD5 match for: '{}'".format(chunk_path))
 
-    def ensure_bigtgz_md5sum_match(self):
-        expected = self.bigtgz_md5sum
-        received = md5(self.big_tgz)
-        if received != expected:
-            m = "MD5 Mismatch detected for: '{}'".format(self.big_tgz)
-            MD5Mismatch(m)
-        else:
-            print("MD5 match for: '{}'".format(self.big_tgz))
 
     def url(self, filename):
         full_path = op.join(self.name, self.version, filename)
