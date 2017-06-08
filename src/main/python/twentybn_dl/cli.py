@@ -1,16 +1,12 @@
 """twentybn-dl
 
 Usage:
-    twentybn-dl get-chunks [<dataset>...]
-    twentybn-dl md5-chunks [<dataset>...]
-    twentybn-dl extract-chunks [<dataset>...]
-    twentybn-dl remove-tmp [<dataset>...]
-    twentybn-dl obtain [<dataset>...]
+    twentybn-dl [options] get-chunks [<dataset>...]
+    twentybn-dl [options] md5-chunks [<dataset>...]
+    twentybn-dl [options] extract-chunks [<dataset>...]
+    twentybn-dl [options] remove-tmp [<dataset>...]
+    twentybn-dl [options] obtain [<dataset>...]
 
-    twentybn-dl get-bigtgz [<dataset>...]
-    twentybn-dl md5-bigtgz [<dataset>...]
-    twentybn-dl extract-bigtgz [<dataset>...]
-    twentybn-dl concat-chunks [<dataset>...]
 
 Subcommands:
     get-chunks : Download bigtgz chunks.
@@ -19,15 +15,16 @@ Subcommands:
     remove-tmp: Remove all temporary files.
     obtain: Download, extract and remove temporary files.
 
-    get-bigtgz : Download bigtgz file(s).
-    md5-bigtgz: Check md5 sum for the bigtg z file(s).
-    extract-bigtgz: Extract the bigtgz file(s).
-    concat-chunks: Concatenate chunks into bigtgz.
+
+Options:
+   -s --storage=STORAGE  Storage location for datasets
+   -u --url-base=URL     Base URL for donwloads
 
 """
 from docopt import docopt
 
-from twentybn_dl.datasets import DATASETS_AVAILABLE
+from .datasets import DATASETS_AVAILABLE
+from .defaults import DEFAULT_STORAGE, DEFAULT_BASE_URL
 
 
 def get_chunks(dsets):
@@ -59,8 +56,14 @@ def remove_tmp(dsets):
 
 def main():
     arguments = docopt(__doc__)
+    print(arguments)
     dsets = arguments['<dataset>'] or DATASETS_AVAILABLE.keys()
     dsets = [DATASETS_AVAILABLE[d] for d in dsets]
+    storage = arguments['--storage'] or DEFAULT_STORAGE
+    base_url = arguments['--base-url'] or DEFAULT_BASE_URL
+    for d in dsets:
+        d.storage = storage
+        d.base_url = base_url
 
     if arguments['get-chunks']:
         get_chunks(dsets)
@@ -76,11 +79,20 @@ def main():
         extract_chunks(dsets)
         remove_tmp()
 
-    if arguments['get-bigtgz']:
-        for d in dsets:
-            print("Will now get bigtgz for: '{}'".format(d.name))
-            d.get_bigtgz()
-    if arguments['extract-bigtgz']:
-        for d in dsets:
-            print("Will now extract bigtgz for: '{}'".format(d.name))
-            d.extract_bigtgz()
+# Unused bigtgz stuff
+#    twentybn-dl get-bigtgz [<dataset>...]
+#    twentybn-dl md5-bigtgz [<dataset>...]
+#    twentybn-dl extract-bigtgz [<dataset>...]
+#    twentybn-dl concat-chunks [<dataset>...]
+#    get-bigtgz : Download bigtgz file(s).
+#    md5-bigtgz: Check md5 sum for the bigtg z file(s).
+#    extract-bigtgz: Extract the bigtgz file(s).
+#    concat-chunks: Concatenate chunks into bigtgz.
+#    if arguments['get-bigtgz']:
+#        for d in dsets:
+#            print("Will now get bigtgz for: '{}'".format(d.name))
+#            d.get_bigtgz()
+#    if arguments['extract-bigtgz']:
+#        for d in dsets:
+#            print("Will now extract bigtgz for: '{}'".format(d.name))
+#            d.extract_bigtgz()

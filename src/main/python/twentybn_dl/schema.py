@@ -6,9 +6,6 @@ from .networking import BigTGZStreamer, ParallelChunkDownloader, WGETDownloader
 from .extract import extract_bigtgz, extract_chunks
 from .utils import md5
 
-DEFAULT_BASE_URL = "https://s3-eu-west-1.amazonaws.com/20bn-public-datasets/"
-DEFAULT_STORAGE = op.expandvars('$HOME/20bn-datasets')
-
 
 class TwentyBNDatasetSchema(object):
 
@@ -20,8 +17,8 @@ class TwentyBNDatasetSchema(object):
                  chunks=None,
                  chunk_md5sums=None,
                  bigtgz_md5sum=None,
-                 base_url=DEFAULT_BASE_URL,
-                 storage=DEFAULT_STORAGE,
+                 base_url=None,
+                 storage=None,
                  ):
         self.name = name
         self.version = version
