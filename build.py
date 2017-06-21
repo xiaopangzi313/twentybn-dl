@@ -17,6 +17,7 @@ version = count_travis()
 
 @init
 def set_properties(project):
+    project.set_property('coverage_break_build', False)
     project.depends_on('requests')
     project.depends_on('tqdm')
     project.depends_on('docopt')
