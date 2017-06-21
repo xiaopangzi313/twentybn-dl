@@ -18,3 +18,15 @@ install:
 
 script:
   - pyb -X
+
+deploy:
+  provider: pypi
+  user: esc
+  distributions: sdist
+  skip_cleanup: true
+  password:
+    secure: "kHzgTIm/kJX0enovh8pLoSbXYp9f/dtrwuC0D3yjCv8tmy/NWu982aTbQjk0kiZ3wRVPeCRoRaBr3+BnETRs6T6zgIPMLszu00KtzWPRx+saWWCoRYPN8sxRUuNpzcQI3xyR1JzvYEbSn0hiBfZHogfI96jVG1YeuRBdYtHBFWWlbiTSyNvMgsALM3/3XxsfIbZZKVyQYZ5X5udeHz5pgsdZd0Nvs+IdRKzjhFzL/6vSj8aVhrBNRBqhWe4KommOXS6pTr6KJzDfSRYXfWwCZELQlSJI474mkUOY1c+8IIauGO+NlOwXRTrZ9BqIN0iQlAgslQtialsCfAlEccA7Yiov81PZYMTmEgjWHDd8Hemk3Lrgc1dy6Uim+RMSTrgIGZs4kfz3CLBxhjamkAulrpdJK6Ck0LmUmN/mvrTzwgiDTSYEIf6V516of537xFWJPRFjKyHKaXLOWjipDkymoEgYTJS+qpL1e2sMAz4XAunThjHZYy0GJeGZhx4Uk9equT0N29FJoS6twy8rDfSIaRiB3zKM9CbdHozOC6RyiDfCWNFHrh/9O1Q8u9btNJA/d5ELYQnkKfEVnc0LY2w2z2L2b7yfF0P27RUxtnXFJTeHvWk4DFZNALjl34JRcfm2hKwUBn55sYdjjtSSqayn5EFzzCy3Jfcq1wqNnnJ5pt8="
+  on:
+    repo: twentybn/twentybn-dl
+    python: '3.6'
+    branch: master
