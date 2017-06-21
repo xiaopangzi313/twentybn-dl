@@ -1,4 +1,4 @@
-from pybuilder.core import use_plugin, init
+from pybuilder.core import use_plugin, init, Author
 from pybuilder.vcs import count_travis
 
 use_plugin("python.core")
@@ -13,6 +13,12 @@ use_plugin("filter_resources")
 name = "twentybn-dl"
 default_task = "publish"
 version = count_travis()
+summary = "TwentyBN public dataset downloader"
+authors = [Author("Valentin Haenel", "valentin.haenel@twentybn.com"),
+           Author("Ingo Bax", "ingo.bax@twentybn.com"),
+           ]
+
+requires_python = ">=3.4"
 
 
 @init
