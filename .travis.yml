@@ -28,3 +28,5 @@ deploy:
     repo: TwentyBN/twentybn-dl
     python: '3.6'
     branch: master
+after-deploy:
+  - cat $HOME/.pypirc
