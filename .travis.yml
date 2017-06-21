@@ -20,6 +20,7 @@ script:
 deploy:
   provider: pypi
   user: esc
+  server: https://upload.pypi.org/legacy/
   distributions: sdist
   skip_cleanup: true
   password:
