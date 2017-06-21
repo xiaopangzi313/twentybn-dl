@@ -21,6 +21,7 @@ script:
 
 deploy:
   provider: pypi
+  server: https://upload.pypi.org/legacy/
   user: esc
   distributions: sdist
   skip_cleanup: true
