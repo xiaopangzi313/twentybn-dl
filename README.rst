@@ -77,7 +77,7 @@ Whereas the following contains any temporary files, e.g. chunk files:
 License
 =======
 
-Copyright (c) 2016 Twenty Billion Neurons GmbH, Berlin, Germany
+Copyright (c) 2017 Twenty Billion Neurons GmbH, Berlin, Germany
 
 MIT License
 
