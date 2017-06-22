@@ -23,6 +23,7 @@ Options:
 
 """
 import os
+import readline
 import os.path as op
 from docopt import docopt
 
@@ -62,13 +63,33 @@ def normalize_storage_argument(storage):
         return DEFAULT_STORAGE
 
 
+def read_storage_path_from_prompt():
+    readline.set_completer_delims(' \t\n')
+    readline.parse_and_bind("tab: complete")
+    choice = input('Set storage directory [Enter for "%s"]: ' % DEFAULT_STORAGE)
+    return choice or DEFAULT_STORAGE
+
+
+def validate_storage_path(storage_path):
+    if not os.path.isdir(storage_path):
+        print('Directory "%s" doesn\'t exist. Using default directory.' % storage_path)
+        return False
+    else:
+        return True
+
+
 def main():
     arguments = docopt(__doc__)
     dsets = arguments['<dataset>'] or DATASETS_AVAILABLE.keys()
     dsets = [DATASETS_AVAILABLE[d] for d in dsets]
     base_url = arguments['--base-url'] or DEFAULT_BASE_URL
-    storage = normalize_storage_argument(arguments['--storage'])
-    print("Using: '{}' as storage.".format(storage))
+    if arguments['list']:
+        storage = DEFAULT_STORAGE  # storage path isn't used
+    else:
+        storage = normalize_storage_argument(arguments['--storage']) if arguments['--storage'] else read_storage_path_from_prompt()
+        if not validate_storage_path(storage):
+            storage = DEFAULT_STORAGE
+        print("Using: '{}' as storage.".format(storage))
     for d in dsets:
         d._storage = storage
         d.base_url = base_url
