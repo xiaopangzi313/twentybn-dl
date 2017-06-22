@@ -13,9 +13,8 @@ import hashlib
 import requests
 from tqdm import tqdm
 
+from .defaults import DEFAULT_STORAGE, DEFAULT_BASE_URL
 
-HTTP_ENDPOINT_BASE = "https://s3-eu-west-1.amazonaws.com/20bn-public-datasets/"
-DOWNLOAD_TARGET_BASE = op.expandvars('$HOME/20bn-datasets')
 
 DOWNLOAD_FAILURE = 0
 DOWNLOAD_SUCCESS = 1
@@ -47,9 +46,9 @@ class Dataset(object):
         self.md5sums = md5sums
         self.bigtgz_md5sum = bigtgz_md5sum
         self.count = count
-        self.tmp_dir = op.join(DOWNLOAD_TARGET_BASE, 'tmp')
+        self.tmp_dir = op.join(DEFAULT_STORAGE, 'tmp')
         self.final_dir = op.join(
-            DOWNLOAD_TARGET_BASE,
+            DEFAULT_STORAGE,
             "20bn-{}-{}".format(self.name, self.version)
         )
         self.big_tgz = op.join(
@@ -79,7 +78,7 @@ class Dataset(object):
 
     def url(self, filename):
         full_path = op.join(self.name, self.version, filename)
-        return urljoin(HTTP_ENDPOINT_BASE, full_path)
+        return urljoin(DEFAULT_BASE_URL, full_path)
 
     @property
     def urls(self):
