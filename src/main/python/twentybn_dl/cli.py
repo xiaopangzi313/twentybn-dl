@@ -19,7 +19,7 @@ Subcommands:
 
 Options:
    -s --storage=STORAGE  Storage location for datasets
-   -u --base-url=URL     Base URL for donwloads
+   -u --base-url=URL     Base URL for downloads
 
 """
 import os
