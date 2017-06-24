@@ -83,7 +83,6 @@ def main():
     dsets = arguments['<dataset>'] or DATASETS_AVAILABLE.keys()
     dsets = [DATASETS_AVAILABLE[d] for d in dsets]
     base_url = arguments['--base-url'] or DEFAULT_BASE_URL
-    d.base_url = base_url
     if not arguments['list']:
         # allow for setting the storage path via args or prompt
         storage = normalize_storage_argument(arguments['--storage']) if arguments['--storage'] else read_storage_path_from_prompt()
@@ -91,6 +90,7 @@ def main():
             storage = DEFAULT_STORAGE
         print("Using: '{}' as storage.".format(storage))
         for d in dsets:
+            d.base_url = base_url
             d._storage = storage
 
     if arguments['list']:
