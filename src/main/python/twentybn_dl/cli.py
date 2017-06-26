@@ -18,8 +18,8 @@ Subcommands:
 
 
 Options:
-   -s --storage=STORAGE  Storage location for datasets
-   -u --base-url=URL     Base URL for downloads
+   -s --storage=STORAGE  Local storage location where downloaded datasets should be stored
+   -u --base-url=URL     Base URL from which to download
 
 """
 import os
