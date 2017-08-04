@@ -39,7 +39,7 @@ class TwentyBNDatasetSchema(object):
         self._storage = storage
 
     def pformat(self):
-        return "Name: {}, Version: {}, Size: {}, Jpegs: {}".format(
+        return "Name: {}, Version: {}, Size: {} videos, num JPEGs: {}".format(
             self.name, self.version, self.size, self.jpegs
         )
 
