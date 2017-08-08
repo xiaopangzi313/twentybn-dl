@@ -73,6 +73,7 @@ Whereas the following contains any temporary files, e.g. chunk files:
 
     ~/20bn-datasets/tmp/
 
+Note: This tool will only download the videos, to obtain the corresponding JSON-files, please visit: https://cortex.twentybn.com
 
 License
 =======
