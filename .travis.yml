@@ -19,12 +19,12 @@ script:
 
 deploy:
   provider: pypi
-  user: esc
+  user: twentybn-machine-user
   server: https://upload.pypi.org/legacy/
   distributions: sdist
   skip_cleanup: true
   password:
-    secure: "txcn4F3LDARHHnRjN1X9XtlykbNOehvUy/TYNh2mOV+whYL6NPoJ6mACSmHjDeSziSAooF0YVdogG/j+Tw/leicaps0/WJMdDSTKC5O11ppz4gN8FQ+TZ4smmn4wCLxAnRDJRyz8T4LcadxWFNjPyyhzTllaeetYEFq6oMoUPjc3x6Hkj8G/cYSgwA9mM5DvMGF8/bVAePrvIsJHYq9koRxN+kaFu9hwD8ID+tfF9wOgZtLvXa+MCRKRjaMiKyr5n+dcbZVcDXzSIl8sC4ELuIf8HYyU41ZgRkNRAu25qs+bBbpYAi+W8Z2QUhX/hz1k5kWDnZ06J8V/aaPtPdPh2hZobqFZuS4Y3cWg+BKggKfb1eSB5tBHd5GVowrb0TnSkVtE0VpPRtiKWbhV3+JVqheEF1V0NRXyy5lMUeruOsAen1ZxEc08fdHiZRhMVbRwk6LnAMyorqwyqen9p1H2W/V5+u8BphNLTVdEefBzZQI38SYGA9T9mEfzN0Z0X3D/QcZKEHklSaxYOvlhLIjTwKolW7n+9eKQE+xaJmARLq8jR91VGYf8ZLUEoCA/28QvOAxI/2ZB6RglqPEqIiiHksHMPkjBXVgqOh86afUqdwaXAsUUf99lEAJoZH7IrOr9GCXpBrnaoB1uniPxakzh9BERSo/nIRLzhhfAbngbnsg="
+    secure: "WT3stSIXupOOnbcmIo4aHkfhrq07KYa4pGmGBkthsPGFQnaHL8v25G9IUi4hQmG/PkpwmhMY0YLB4EwudTn0v8GD5s/CxlDbEgIKe5qB+NNPEP/1fMnjV96TU10IoRa6gWuA8xlMx2VuHjn6TI1plbuFkwN+LUwXU4sqw+imuhKIMk7QYl8a8VVmCCQM3e/KQIpKeQSQEtyQYgfAf/ZETWomWnIS7+gAUK3pqYVLJXu4T6+8tUcv/JvvrqkLAiE156VbxY1T4ZplllzInVB+DuxjCD1bHone3I2IYWIlAbwSYxIuX1JDO/VT8PM4IV8fQvZDcJe2s0udk1b/KoVeK1GOc3r3mUkvKu5jHSVWYNYpwCgRuCvAax7GXpAeIHfVQ0mpwMWh8/OUEVWj820JU2CnBjRTs1NxtKrsZ7uRxpjY7YLCs7Jo9X/RPIKo/iUJvgRAtofGAjPhss3UH/xPrxAYzldudr2dhb+F7MrLICQNJpbYN5zSfRyJXJ2XMJJ2mrqaYw1A62QUn/9c7i9B9X1nNRjWpvzJdMIqlNN4k713LulC9lO9oP/6EjDS5M0cgJLFK+V8uYRebhV6AreSdZqDND0hS4UgowUpNNMbJcKlS9KzJ23Jbg/Q7QXe2X2P9RskjK4/r+afDDOzzeJ+ycJZkX/e13s92xklhNmJ+uQ="
   on:
     repo: TwentyBN/twentybn-dl
     python: '3.6'
